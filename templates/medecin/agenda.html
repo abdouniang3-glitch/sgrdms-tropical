@@ -1,0 +1,24 @@
+{% extends "base.html" %}{% block title %}Mon Agenda{% endblock %}
+{% block page_icon %}<i class="fas fa-calendar-days" style="color:var(--green)"></i>{% endblock %}
+{% block page_title %}Mon Agenda — Dr {{ medecin.nom_medecin }}{% endblock %}
+{% block content %}
+<div class="card fade-in"><div class="table-wrap"><table class="data-table">
+  <thead><tr><th>Date</th><th>Heure</th><th>Patient</th><th>Service</th><th>Motif</th><th>Type</th><th>Statut</th><th>Actions</th></tr></thead>
+  <tbody>{% for r in rdvs %}<tr>
+    <td style="font-weight:600">{{ r.date_rdv_prevue }}</td>
+    <td style="color:var(--cyan);font-weight:600">{{ r.heure or '—' }}</td>
+    <td><strong>{{ r.nom_patient }} {{ r.prenom_patient }}</strong></td>
+    <td style="color:var(--text2)">{{ r.nom_service }}</td>
+    <td style="color:var(--text2);font-size:12.5px">{{ r.motif or '—' }}</td>
+    <td><span class="badge b-info">{{ r.type_rdv }}</span></td>
+    <td>{% if r.statut_rdv=='effectué' %}<span class="badge b-success">Effectué</span>
+        {% elif r.statut_rdv=='annulé' %}<span class="badge b-danger">Annulé</span>
+        {% else %}<span class="badge b-warning">{{ r.statut_rdv }}</span>{% endif %}</td>
+    <td style="display:flex;gap:6px">
+      {% if r.statut_rdv not in ['effectué','annulé'] %}
+      <a href="{{ url_for('medecin_nouvelle_consultation', id_rdv=r.id_rdv) }}" class="btn btn-success btn-icon" title="Consulter"><i class="fas fa-stethoscope"></i></a>
+      {% endif %}
+      <a href="{{ url_for('medecin_dossier_patient', id_patient=r.id_patient) }}" class="btn btn-ghost btn-icon" title="Dossier"><i class="fas fa-folder-open"></i></a>
+    </td>
+  </tr>{% else %}<tr><td colspan="8"><div class="empty-state"><i class="fas fa-calendar"></i><p>Aucun rendez-vous.</p></div></td></tr>{% endfor %}</tbody>
+</table></div></div>{% endblock %}

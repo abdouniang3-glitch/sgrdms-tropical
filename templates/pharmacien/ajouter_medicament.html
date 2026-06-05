@@ -1,0 +1,27 @@
+{% extends "base.html" %}{% block title %}Ajouter Médicament{% endblock %}
+{% block page_icon %}<i class="fas fa-plus" style="color:var(--gold)"></i>{% endblock %}
+{% block page_title %}Nouveau Médicament{% endblock %}
+{% block content %}<div style="max-width:700px"><form method="POST" class="fade-in">
+  <div class="card" style="margin-bottom:16px"><div class="card-header"><span><i class="fas fa-pills"></i> Fiche médicament</span></div>
+  <div class="card-body">
+    <div class="form-row form-row-2">
+      <div class="form-group" style="grid-column:span 2"><label class="form-label">Nom commercial *</label><input type="text" name="nom" class="form-control" required></div>
+      <div class="form-group"><label class="form-label">Forme galénique</label>
+        <select name="forme" class="form-select"><option>Comprimé</option><option>Gélule</option><option>Sirop</option><option>Injectable</option><option>Pommade</option><option>Suppositoire</option><option>Gouttes</option></select></div>
+      <div class="form-group"><label class="form-label">Dosage</label><input type="text" name="dosage" class="form-control" placeholder="ex: 500mg, 250mg/5ml"></div>
+      <div class="form-group"><label class="form-label">Catégorie thérapeutique</label><input type="text" name="categorie" class="form-control" placeholder="ex: Antibiotique, Antalgique"></div>
+      <div class="form-group"><label class="form-label">Prix unitaire (FCFA)</label><input type="number" name="prix" class="form-control" step="0.01" value="0"></div>
+      <div class="form-group" style="grid-column:span 2"><label class="form-label">Description / Indications</label><textarea name="description" class="form-control"></textarea></div>
+    </div>
+  </div></div>
+  <div class="card" style="margin-bottom:20px"><div class="card-header"><span><i class="fas fa-warehouse"></i> Inventaire initial</span></div>
+  <div class="card-body">
+    <div class="form-row form-row-4">
+      <div class="form-group"><label class="form-label">Quantité *</label><input type="number" name="quantite" class="form-control" required value="0" min="0"></div>
+      <div class="form-group"><label class="form-label">Seuil alerte *</label><input type="number" name="seuil" class="form-control" required value="10" min="0"></div>
+      <div class="form-group"><label class="form-label">N° de lot</label><input type="text" name="numero_lot" class="form-control"></div>
+      <div class="form-group"><label class="form-label">Date expiration</label><input type="date" name="date_expiration" class="form-control"></div>
+    </div>
+  </div></div>
+  <div style="display:flex;gap:12px"><button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Enregistrer</button><a href="{{ url_for('pharmacien_medicaments') }}" class="btn btn-ghost">Annuler</a></div>
+</form></div>{% endblock %}

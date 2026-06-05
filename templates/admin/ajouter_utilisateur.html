@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Nouvel Utilisateur{% endblock %}
+{% block page_icon %}<i class="fas fa-user-plus"></i>{% endblock %}
+{% block page_title %}Créer un Utilisateur{% endblock %}
+{% block content %}<div style="max-width:480px">
+<form method="POST" class="fade-in">
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header"><span><i class="fas fa-user-gear"></i> Nouveau compte</span></div>
+    <div class="card-body">
+      <div class="form-group"><label class="form-label">Login *</label><input type="text" name="login" class="form-control" required></div>
+      <div class="form-group"><label class="form-label">Mot de passe *</label><input type="password" name="mot_de_passe" class="form-control" required></div>
+      <div class="form-group"><label class="form-label">Rôle *</label>
+        <select name="role" class="form-select">
+          <option value="admin">Administrateur</option>
+          <option value="medecin">Médecin</option>
+          <option value="pharmacien">Pharmacien</option>
+          <option value="patient">Patient</option>
+          <option value="secretaire">Secrétaire</option>
+          <option value="assureur">Assureur</option>
+        </select></div>
+    </div>
+  </div>
+  <div style="display:flex;gap:12px">
+    <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Créer</button>
+    <a href="{{ url_for('admin_utilisateurs') }}" class="btn btn-ghost">Annuler</a>
+  </div>
+</form></div>{% endblock %}

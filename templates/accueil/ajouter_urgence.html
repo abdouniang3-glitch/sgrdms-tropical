@@ -1,0 +1,41 @@
+{% extends "base.html" %}{% block title %}Nouvelle Urgence{% endblock %}
+{% block page_icon %}<i class="fas fa-truck-medical" style="color:var(--red)"></i>{% endblock %}
+{% block page_title %}Nouveau Cas d'Urgence{% endblock %}
+{% block content %}<div style="max-width:640px"><form method="POST" class="fade-in">
+  <div class="card" style="margin-bottom:16px;border-color:rgba(255,77,109,.3)">
+    <div class="card-header" style="background:rgba(255,77,109,.08)"><span style="color:var(--red)"><i class="fas fa-truck-medical"></i> Prise en charge urgence</span></div>
+    <div class="card-body">
+      <div class="form-row form-row-2">
+        <div class="form-group"><label class="form-label">Patient *</label>
+          <select name="id_patient" class="form-select" required>
+            {% for p in patients %}<option value="{{ p.id_patient }}">{{ p.nom_patient }} {{ p.prenom_patient }}</option>{% endfor %}
+          </select></div>
+        <div class="form-group"><label class="form-label">Niveau de triage *</label>
+          <select name="niveau_triage" class="form-select">
+            <option value="critique">🔴 Critique — Immédiat</option>
+            <option value="urgent">🟠 Urgent — Moins de 20 min</option>
+            <option value="moyen" selected>🟡 Moyen</option>
+            <option value="non urgent">🟢 Non urgent</option>
+          </select></div>
+        <div class="form-group"><label class="form-label">Médecin assigné</label>
+          <select name="id_medecin" class="form-select">
+            <option value="">— Pas encore assigné —</option>
+            {% for m in medecins %}<option value="{{ m.id_medecin }}">Dr {{ m.nom_medecin }}</option>{% endfor %}
+          </select></div>
+        <div class="form-group"><label class="form-label">Service</label>
+          <select name="id_service" class="form-select">
+            <option value="">— Urgences —</option>
+            {% for s in services %}<option value="{{ s.id_service }}">{{ s.nom_service }}</option>{% endfor %}
+          </select></div>
+        <div class="form-group" style="grid-column:span 2"><label class="form-label">Motif / Symptômes *</label>
+          <textarea name="motif" class="form-control" rows="3" required></textarea></div>
+        <div class="form-group" style="grid-column:span 2"><label class="form-label">Observations initiales</label>
+          <textarea name="observations" class="form-control" rows="2"></textarea></div>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;gap:12px">
+    <button type="submit" class="btn btn-danger"><i class="fas fa-truck-medical"></i> Enregistrer</button>
+    <a href="{{ url_for('accueil_urgences') }}" class="btn btn-ghost">Annuler</a>
+  </div>
+</form></div>{% endblock %}

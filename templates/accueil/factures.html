@@ -1,0 +1,19 @@
+{% extends "base.html" %}{% block title %}Factures — Accueil{% endblock %}
+{% block page_icon %}<i class="fas fa-receipt" style="color:var(--cyan)"></i>{% endblock %}
+{% block page_title %}Gestion des Factures{% endblock %}
+{% block content %}
+<div class="card fade-in"><div class="table-wrap"><table class="data-table">
+  <thead><tr><th>#</th><th>Date</th><th>Patient</th><th>Total</th><th>Part patient</th><th>Assurance</th><th>Restant</th><th>Statut</th></tr></thead>
+  <tbody>{% for f in factures %}<tr>
+    <td style="color:var(--text3)">{{ f.id_facture }}</td>
+    <td>{{ f.date_facture }}</td>
+    <td><strong>{{ f.nom_patient }} {{ f.prenom_patient }}</strong></td>
+    <td>{{ f.montant_total }} FCFA</td>
+    <td>{{ f.montant_patient }} FCFA</td>
+    <td style="color:var(--green)">{{ f.montant_assurance or 0 }} FCFA</td>
+    <td><strong style="color:{% if f.montant_restant > 0 %}var(--red){% else %}var(--green){% endif %}">{{ f.montant_restant }} FCFA</strong></td>
+    <td>{% if f.statut=='payée' %}<span class="badge b-success">Payée</span>
+        {% else %}<span class="badge b-danger">En attente</span>{% endif %}</td>
+  </tr>{% else %}<tr><td colspan="8"><div class="empty-state"><i class="fas fa-receipt"></i><p>Aucune facture.</p></div></td></tr>{% endfor %}</tbody>
+</table></div></div>
+{% endblock %}

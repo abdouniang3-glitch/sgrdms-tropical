@@ -1,0 +1,33 @@
+{% extends "base.html" %}{% block title %}Assureur Dashboard{% endblock %}
+{% block page_icon %}<i class="fas fa-shield-halved" style="color:var(--orange)"></i>{% endblock %}
+{% block page_title %}Espace Assureur — Tableau de bord{% endblock %}
+{% block content %}
+<div class="stat-grid stat-grid-4 fade-in" style="margin-bottom:20px">
+  <div class="stat-card red"><div class="stat-header"><div><div class="stat-value">{{ stats.factures_en_attente }}</div><div class="stat-label">Factures à traiter</div></div><div class="stat-icon ic-red"><i class="fas fa-file-invoice-dollar"></i></div></div></div>
+  <div class="stat-card green"><div class="stat-header"><div><div class="stat-value" style="font-size:22px">{{ stats.remboursements|int }} F</div><div class="stat-label">Total remboursé</div></div><div class="stat-icon ic-green"><i class="fas fa-hand-holding-dollar"></i></div></div></div>
+  <div class="stat-card cyan"><div class="stat-header"><div><div class="stat-value">{{ stats.contrats }}</div><div class="stat-label">Contrats actifs</div></div><div class="stat-icon ic-cyan"><i class="fas fa-file-contract"></i></div></div></div>
+  <div class="stat-card orange"><div class="stat-header"><div><div class="stat-value">{{ stats.patients_couverts }}</div><div class="stat-label">Patients couverts</div></div><div class="stat-icon ic-orange"><i class="fas fa-users-gear"></i></div></div></div>
+</div>
+
+<div class="card fade-in-1">
+  <div class="card-header">
+    <span><i class="fas fa-clock"></i> Dernières factures à traiter</span>
+    <a href="{{ url_for('assureur_factures') }}" class="btn btn-ghost btn-sm">Voir tout</a>
+  </div>
+  {% if factures_recentes %}
+  <div class="table-wrap"><table class="data-table">
+    <thead><tr><th>Date</th><th>Patient</th><th>Assurance</th><th>Total</th><th>Part assurance</th><th>Statut</th><th>Action</th></tr></thead>
+    <tbody>{% for f in factures_recentes %}<tr>
+      <td>{{ f.date_facture }}</td>
+      <td><strong>{{ f.nom_patient }} {{ f.prenom_patient }}</strong></td>
+      <td style="color:var(--text2)">{{ f.nom_compagnie or '—' }}</td>
+      <td>{{ f.montant_total }} FCFA</td>
+      <td style="color:var(--green)">{{ f.montant_assurance or '—' }} FCFA</td>
+      <td>{% if f.statut=='payée' %}<span class="badge b-success">Payée</span>{% else %}<span class="badge b-warning">En attente</span>{% endif %}</td>
+      <td>{% if f.statut != 'payée' %}
+        <a href="{{ url_for('assureur_valider_facture', id_facture=f.id_facture) }}" class="btn btn-success btn-sm"><i class="fas fa-check"></i> Valider</a>
+      {% else %}<span style="color:var(--text3);font-size:12px">Traitée</span>{% endif %}</td>
+    </tr>{% endfor %}</tbody>
+  </table></div>
+  {% else %}<div class="empty-state"><i class="fas fa-circle-check" style="color:var(--green);opacity:1"></i><p style="color:var(--green)">Aucune facture en attente.</p></div>{% endif %}
+</div>{% endblock %}

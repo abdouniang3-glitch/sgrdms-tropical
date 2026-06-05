@@ -1,0 +1,28 @@
+{% extends "base.html" %}{% block title %}Factures{% endblock %}
+{% block page_icon %}<i class="fas fa-file-invoice-dollar" style="color:var(--orange)"></i>{% endblock %}
+{% block page_title %}Factures à traiter{% endblock %}
+{% block content %}
+<div class="action-bar fade-in">
+  <div style="display:flex;gap:8px">
+    <a href="{{ url_for('assureur_factures') }}" class="btn {% if not statut %}btn-primary{% else %}btn-ghost{% endif %} btn-sm">Toutes</a>
+    <a href="{{ url_for('assureur_factures', statut='en attente') }}" class="btn {% if statut=='en attente' %}btn-primary{% else %}btn-ghost{% endif %} btn-sm">En attente</a>
+    <a href="{{ url_for('assureur_factures', statut='payée') }}" class="btn {% if statut=='payée' %}btn-success{% else %}btn-ghost{% endif %} btn-sm">Payées</a>
+  </div>
+</div>
+<div class="card fade-in-1"><div class="table-wrap"><table class="data-table">
+  <thead><tr><th>#</th><th>Date</th><th>Patient</th><th>Assurance</th><th>Taux</th><th>Total</th><th>Part assurance</th><th>Restant</th><th>Statut</th><th>Action</th></tr></thead>
+  <tbody>{% for f in factures %}<tr>
+    <td style="color:var(--text3)">{{ f.id_facture }}</td>
+    <td>{{ f.date_facture }}</td>
+    <td><strong>{{ f.nom_patient }} {{ f.prenom_patient }}</strong></td>
+    <td style="color:var(--text2)">{{ f.nom_compagnie or '—' }}</td>
+    <td><span class="badge b-info">{{ f.taux_prise_charge or '—' }}%</span></td>
+    <td>{{ f.montant_total }} F</td>
+    <td style="color:var(--green)">{{ f.montant_assurance or 0 }} F</td>
+    <td><strong style="color:var(--red)">{{ f.montant_restant }} F</strong></td>
+    <td>{% if f.statut=='payée' %}<span class="badge b-success">Payée</span>{% else %}<span class="badge b-warning">En attente</span>{% endif %}</td>
+    <td>{% if f.statut != 'payée' %}
+      <a href="{{ url_for('assureur_valider_facture', id_facture=f.id_facture) }}" class="btn btn-success btn-icon-sm" title="Valider"><i class="fas fa-check"></i></a>
+    {% else %}<i class="fas fa-check-circle" style="color:var(--green)"></i>{% endif %}</td>
+  </tr>{% else %}<tr><td colspan="10"><div class="empty-state"><i class="fas fa-file-invoice"></i><p>Aucune facture.</p></div></td></tr>{% endfor %}</tbody>
+</table></div></div>{% endblock %}

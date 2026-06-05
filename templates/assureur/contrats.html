@@ -1,0 +1,25 @@
+{% extends "base.html" %}{% block title %}Contrats{% endblock %}
+{% block page_icon %}<i class="fas fa-file-contract" style="color:var(--orange)"></i>{% endblock %}
+{% block page_title %}Contrats d'Assurance{% endblock %}
+{% block content %}
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px" class="fade-in">
+{% for a in assurances %}
+<div class="card">
+  <div class="card-header" style="justify-content:space-between">
+    <span style="font-weight:700">{{ a.nom_compagnie }}</span>
+    {% if a.statut=='active' %}<span class="badge b-success">Active</span>{% else %}<span class="badge b-muted">{{ a.statut }}</span>{% endif %}
+  </div>
+  <div class="card-body">
+    <div class="info-block">
+      <div class="info-row"><div class="info-label">N° Contrat</div><div class="info-value" style="font-size:12px">{{ a.numero_contrat }}</div></div>
+      <div class="info-row"><div class="info-label">Taux remb.</div><div class="info-value"><strong style="color:var(--green);font-size:16px">{{ a.taux_prise_charge }}%</strong></div></div>
+      <div class="info-row"><div class="info-label">Type</div><div class="info-value">{{ a.type_assurance }}</div></div>
+      <div class="info-row"><div class="info-label">Validité</div><div class="info-value" style="font-size:12px">{{ a.date_debut }} → {{ a.fin_couverture }}</div></div>
+      <div class="info-row"><div class="info-label">Plafond annuel</div><div class="info-value" style="font-size:12px">{{ a.plafond_annuel or 'Illimité' }} FCFA</div></div>
+      <div class="info-row"><div class="info-label">Tiers payant</div><div class="info-value">{% if a.statut_tiers_pay %}<span class="badge b-info">Oui</span>{% else %}<span class="badge b-muted">Non</span>{% endif %}</div></div>
+      <div class="info-row"><div class="info-label">Patients couverts</div><div class="info-value"><span class="badge b-purple">{{ a.nb_patients }}</span></div></div>
+    </div>
+  </div>
+</div>
+{% else %}<div class="card"><div class="card-body"><div class="empty-state"><i class="fas fa-file-contract"></i><p>Aucun contrat.</p></div></div></div>{% endfor %}
+</div>{% endblock %}

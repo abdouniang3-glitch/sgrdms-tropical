@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% block title %}Planifier RDV{% endblock %}{% block page_icon %}<i class="fas fa-calendar-plus"></i>{% endblock %}{% block page_title %}Planifier un Rendez-vous{% endblock %}
+{% block content %}<div style="max-width:640px"><form method="POST" class="fade-in">
+  <div class="card" style="margin-bottom:20px"><div class="card-header"><span><i class="fas fa-calendar-plus"></i> Nouveau rendez-vous</span></div>
+  <div class="card-body">
+    <div class="form-row form-row-2">
+      <div class="form-group"><label class="form-label">Patient *</label><select name="id_patient" class="form-select" required>{% for p in patients %}<option value="{{ p.id_patient }}">{{ p.nom_patient }} {{ p.prenom_patient }}</option>{% endfor %}</select></div>
+      <div class="form-group"><label class="form-label">Médecin *</label><select name="id_medecin" class="form-select" required>{% for m in medecins %}<option value="{{ m.id_medecin }}">Dr {{ m.nom_medecin }} — {{ m.specialite }}</option>{% endfor %}</select></div>
+      <div class="form-group" style="grid-column:span 2"><label class="form-label">Service *</label><select name="id_service" class="form-select" required>{% for s in services %}<option value="{{ s.id_service }}">{{ s.nom_service }} ({{ s.nom_centre }})</option>{% endfor %}</select></div>
+      <div class="form-group"><label class="form-label">Date *</label><input type="date" name="date_rdv" class="form-control" required></div>
+      <div class="form-group"><label class="form-label">Heure</label><input type="time" name="heure" class="form-control"></div>
+      <div class="form-group"><label class="form-label">Type</label><select name="type_rdv" class="form-select"><option>présentiel</option><option>téléconsultation</option><option>urgence</option></select></div>
+      <div class="form-group" style="grid-column:span 2"><label class="form-label">Motif</label><textarea name="motif" class="form-control"></textarea></div>
+    </div>
+  </div></div>
+  <div style="display:flex;gap:12px"><button type="submit" class="btn btn-success"><i class="fas fa-calendar-check"></i> Planifier</button><a href="{{ url_for('admin_rendez_vous') }}" class="btn btn-ghost">Annuler</a></div>
+</form></div>{% endblock %}

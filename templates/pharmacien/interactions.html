@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% block title %}Interactions{% endblock %}
+{% block page_icon %}<i class="fas fa-triangle-exclamation" style="color:var(--red)"></i>{% endblock %}
+{% block page_title %}Interactions Médicamenteuses{% endblock %}
+{% block content %}<div class="card fade-in"><div class="table-wrap">
+{% if interactions %}
+<table class="data-table">
+  <thead><tr><th>Médicament 1</th><th>Médicament 2</th><th>Niveau de risque</th><th>Alerte / Description</th></tr></thead>
+  <tbody>{% for i in interactions %}<tr>
+    <td><strong>{{ i.med1 }}</strong></td>
+    <td><strong>{{ i.med2 }}</strong></td>
+    <td>{% if i.niveau_physique=='élevé' %}<span class="badge b-danger"><i class="fas fa-circle-xmark"></i> Élevé</span>
+        {% elif i.niveau_physique=='modéré' %}<span class="badge b-warning"><i class="fas fa-triangle-exclamation"></i> Modéré</span>
+        {% else %}<span class="badge b-info">Faible</span>{% endif %}</td>
+    <td style="color:var(--text2);font-size:13px">{{ i.alerte }}</td>
+  </tr>{% endfor %}</tbody>
+</table>
+{% else %}<div class="empty-state"><i class="fas fa-circle-check" style="color:var(--green);opacity:1"></i><p style="color:var(--green)">Aucune interaction médicamenteuse enregistrée.</p></div>{% endif %}
+</div></div>{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}{% block title %}Pharmacie Dashboard{% endblock %}
+{% block page_icon %}<i class="fas fa-flask" style="color:var(--gold)"></i>{% endblock %}
+{% block page_title %}Pharmacie — Tableau de bord{% endblock %}
+{% block content %}
+<div class="stat-grid stat-grid-4 fade-in" style="margin-bottom:20px">
+  <div class="stat-card cyan"><div class="stat-header"><div><div class="stat-value">{{ stats.medicaments }}</div><div class="stat-label">Médicaments référencés</div></div><div class="stat-icon ic-cyan"><i class="fas fa-pills"></i></div></div></div>
+  <div class="stat-card red"><div class="stat-header"><div><div class="stat-value">{{ stats.ruptures }}</div><div class="stat-label">Ruptures de stock</div></div><div class="stat-icon ic-red"><i class="fas fa-triangle-exclamation"></i></div></div></div>
+  <div class="stat-card orange"><div class="stat-header"><div><div class="stat-value">{{ stats.expirations }}</div><div class="stat-label">Expirent dans 30j</div></div><div class="stat-icon ic-orange"><i class="fas fa-hourglass-half"></i></div></div></div>
+  <div class="stat-card green"><div class="stat-header"><div><div class="stat-value">{{ stats.ordonnances }}</div><div class="stat-label">Ordonnances total</div></div><div class="stat-icon ic-green"><i class="fas fa-prescription"></i></div></div></div>
+</div>
+
+{% if alertes %}
+<div class="card fade-in-1" style="margin-bottom:20px;border-color:rgba(255,77,109,.3)">
+  <div class="card-header" style="background:rgba(255,77,109,.08);border-bottom-color:rgba(255,77,109,.2)">
+    <span style="color:var(--red)"><i class="fas fa-triangle-exclamation"></i> Alertes rupture de stock ({{ alertes|length }})</span>
+  </div>
+  <div class="table-wrap"><table class="data-table">
+    <thead><tr><th>Médicament</th><th>Stock actuel</th><th>Seuil alerte</th><th>Lot</th><th>Action</th></tr></thead>
+    <tbody>{% for a in alertes %}<tr>
+      <td><strong>{{ a.nom_medicament }}</strong></td>
+      <td><strong style="color:var(--red);font-size:16px">{{ a.quantite_dispo }}</strong></td>
+      <td style="color:var(--text2)">{{ a.seuil_alerte }}</td>
+      <td><span class="badge b-muted">{{ a.numero_lot or '—' }}</span></td>
+      <td><a href="{{ url_for('pharmacien_modifier_stock', id_inv=a.id_inventaire) }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Réapprovisionner</a></td>
+    </tr>{% endfor %}</tbody>
+  </table></div>
+</div>
+{% endif %}
+
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px" class="fade-in-2">
+  <a href="{{ url_for('pharmacien_medicaments') }}" class="qa-btn"><i class="fas fa-pills"></i><span>Gérer le stock</span></a>
+  <a href="{{ url_for('pharmacien_ordonnances') }}" class="qa-btn"><i class="fas fa-file-prescription"></i><span>Voir les ordonnances</span></a>
+  <a href="{{ url_for('pharmacien_interactions') }}" class="qa-btn" style="border-color:rgba(255,77,109,.2)"><i class="fas fa-triangle-exclamation" style="color:var(--red)"></i><span>Interactions médicaments</span></a>
+</div>{% endblock %}

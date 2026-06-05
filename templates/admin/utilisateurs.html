@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Utilisateurs{% endblock %}
+{% block page_icon %}<i class="fas fa-user-gear"></i>{% endblock %}
+{% block page_title %}Gestion des Utilisateurs{% endblock %}
+{% block content %}
+<div class="action-bar fade-in">
+  <span style="color:var(--text2);font-size:13px">{{ users|length }} utilisateur(s)</span>
+  <a href="{{ url_for('admin_ajouter_utilisateur') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Nouvel utilisateur</a>
+</div>
+<div class="card fade-in-1"><div class="table-wrap">
+<table class="data-table">
+  <thead><tr><th>#</th><th>Login</th><th>Rôle</th><th>Actions</th></tr></thead>
+  <tbody>{% for u in users %}<tr>
+    <td style="color:var(--text3)">{{ u.id_utilisateur }}</td>
+    <td><strong>{{ u.login }}</strong></td>
+    <td><span class="badge-role br-{{ u.role }}" style="font-size:11px">{{ u.role }}</span></td>
+    <td><a href="{{ url_for('admin_supprimer_utilisateur', id=u.id_utilisateur) }}" class="btn btn-danger btn-icon-sm" onclick="return confirm('Supprimer ?')" title="Supprimer"><i class="fas fa-trash"></i></a></td>
+  </tr>{% endfor %}</tbody>
+</table></div></div>{% endblock %}

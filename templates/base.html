@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}SGRDMS — LE TROPICAL{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+{% if session.user_id %}
+<nav class="sidebar">
+  <div class="sidebar-brand">
+    <div class="logo-wrap">
+      <div class="logo-icon"><i class="fas fa-heartbeat"></i></div>
+      <span class="logo-text">SGRDMS</span>
+    </div>
+    <div class="logo-sub">Centre LE TROPICAL — Thiès</div>
+  </div>
+
+  {% if session.role == 'admin' %}
+  <div class="sidebar-section">Administration</div>
+  <a href="{{ url_for('admin_dashboard') }}" class="sidebar-link {% if request.endpoint=='admin_dashboard' %}active{% endif %}"><i class="fas fa-chart-pie"></i> Tableau de bord</a>
+  <a href="{{ url_for('admin_patients') }}" class="sidebar-link {% if 'admin_patient' in (request.endpoint or '') %}active{% endif %}"><i class="fas fa-users"></i> Patients</a>
+  <a href="{{ url_for('admin_medecins') }}" class="sidebar-link {% if 'admin_medecin' in (request.endpoint or '') %}active{% endif %}"><i class="fas fa-user-md"></i> Médecins</a>
+  <a href="{{ url_for('admin_rendez_vous') }}" class="sidebar-link {% if 'admin_rendez' in (request.endpoint or '') %}active{% endif %}"><i class="fas fa-calendar-check"></i> Rendez-vous</a>
+  <a href="{{ url_for('admin_services') }}" class="sidebar-link {% if 'admin_service' in (request.endpoint or '') %}active{% endif %}"><i class="fas fa-hospital-user"></i> Services médicaux</a>
+  <a href="{{ url_for('admin_centres') }}" class="sidebar-link {% if 'admin_centre' in (request.endpoint or '') %}active{% endif %}"><i class="fas fa-hospital"></i> Centres médicaux</a>
+  <a href="{{ url_for('admin_assurances') }}" class="sidebar-link {% if 'admin_assurance' in (request.endpoint or '') %}active{% endif %}"><i class="fas fa-shield-halved"></i> Assurances</a>
+  <a href="{{ url_for('admin_urgences') }}" class="sidebar-link {% if 'admin_urgence' in (request.endpoint or '') %}active{% endif %}"><i class="fas fa-truck-medical"></i> Urgences / Triage</a>
+  <a href="{{ url_for('admin_liste_attente') }}" class="sidebar-link {% if 'admin_liste' in (request.endpoint or '') %}active{% endif %}"><i class="fas fa-list-ol"></i> Liste d'attente</a>
+  <a href="{{ url_for('admin_utilisateurs') }}" class="sidebar-link {% if 'admin_utilisateur' in (request.endpoint or '') %}active{% endif %}"><i class="fas fa-user-gear"></i> Utilisateurs</a>
+  <a href="{{ url_for('admin_historique') }}" class="sidebar-link {% if request.endpoint=='admin_historique' %}active{% endif %}"><i class="fas fa-clock-rotate-left"></i> Journal audit</a>
+
+  {% elif session.role in ['accueil','secretaire'] %}
+  <div class="sidebar-section">Accueil / Secrétariat</div>
+  <a href="{{ url_for('accueil_dashboard') }}" class="sidebar-link {% if request.endpoint=='accueil_dashboard' %}active{% endif %}"><i class="fas fa-chart-pie"></i> Tableau de bord</a>
+  <a href="{{ url_for('accueil_patients') }}" class="sidebar-link {% if 'accueil_patient' in (request.endpoint or '') %}active{% endif %}"><i class="fas fa-user-plus"></i> Enregistrer patient</a>
+  <a href="{{ url_for('accueil_rendez_vous') }}" class="sidebar-link {% if 'accueil_rdv' in (request.endpoint or '') or 'accueil_rendez' in (request.endpoint or '') %}active{% endif %}"><i class="fas fa-calendar-check"></i> Rendez-vous</a>
+  <a href="{{ url_for('accueil_urgences') }}" class="sidebar-link {% if 'accueil_urgence' in (request.endpoint or '') %}active{% endif %}"><i class="fas fa-truck-medical"></i> Urgences / Triage</a>
+  <a href="{{ url_for('accueil_liste_attente') }}" class="sidebar-link {% if 'accueil_liste' in (request.endpoint or '') or 'accueil_attente' in (request.endpoint or '') %}active{% endif %}"><i class="fas fa-list-ol"></i> Liste d'attente</a>
+  <a href="{{ url_for('accueil_factures') }}" class="sidebar-link {% if 'accueil_facture' in (request.endpoint or '') %}active{% endif %}"><i class="fas fa-receipt"></i> Factures</a>
+
+  {% elif session.role == 'medecin' %}
+  <div class="sidebar-section">Espace Médecin</div>
+  <a href="{{ url_for('medecin_dashboard') }}" class="sidebar-link {% if request.endpoint=='medecin_dashboard' %}active{% endif %}"><i class="fas fa-chart-pie"></i> Tableau de bord</a>
+  <a href="{{ url_for('medecin_agenda') }}" class="sidebar-link {% if 'agenda' in (request.endpoint or '') %}active{% endif %}"><i class="fas fa-calendar-days"></i> Mon Agenda</a>
+  <a href="{{ url_for('medecin_teleconsultations') }}" class="sidebar-link {% if 'teleconsult' in (request.endpoint or '') %}active{% endif %}"><i class="fas fa-video"></i> Téléconsultations</a>
+
+  {% elif session.role == 'pharmacien' %}
+  <div class="sidebar-section">Pharmacie</div>
+  <a href="{{ url_for('pharmacien_dashboard') }}" class="sidebar-link {% if request.endpoint=='pharmacien_dashboard' %}active{% endif %}"><i class="fas fa-chart-pie"></i> Tableau de bord</a>
+  <a href="{{ url_for('pharmacien_medicaments') }}" class="sidebar-link {% if 'medicament' in (request.endpoint or '') %}active{% endif %}"><i class="fas fa-pills"></i> Médicaments & Stock</a>
+  <a href="{{ url_for('pharmacien_ordonnances') }}" class="sidebar-link {% if 'ordonnance' in (request.endpoint or '') %}active{% endif %}"><i class="fas fa-file-prescription"></i> Ordonnances</a>
+  <a href="{{ url_for('pharmacien_interactions') }}" class="sidebar-link {% if 'interaction' in (request.endpoint or '') %}active{% endif %}"><i class="fas fa-triangle-exclamation"></i> Interactions</a>
+
+  {% elif session.role == 'patient' %}
+  <div class="sidebar-section">Mon Espace</div>
+  <a href="{{ url_for('patient_dashboard') }}" class="sidebar-link {% if request.endpoint=='patient_dashboard' %}active{% endif %}"><i class="fas fa-house"></i> Accueil</a>
+  <a href="{{ url_for('patient_dossier') }}" class="sidebar-link {% if 'dossier' in (request.endpoint or '') %}active{% endif %}"><i class="fas fa-folder-open"></i> Mon Dossier</a>
+  <a href="{{ url_for('patient_rendez_vous') }}" class="sidebar-link {% if 'rendez' in (request.endpoint or '') %}active{% endif %}"><i class="fas fa-calendar-check"></i> Mes Rendez-vous</a>
+  <a href="{{ url_for('patient_ordonnances') }}" class="sidebar-link {% if 'ordonnance' in (request.endpoint or '') %}active{% endif %}"><i class="fas fa-file-medical"></i> Mes Ordonnances</a>
+  <a href="{{ url_for('patient_factures') }}" class="sidebar-link {% if 'facture' in (request.endpoint or '') %}active{% endif %}"><i class="fas fa-receipt"></i> Mes Factures</a>
+  <a href="{{ url_for('patient_assurances') }}" class="sidebar-link {% if 'assurance' in (request.endpoint or '') %}active{% endif %}"><i class="fas fa-shield-halved"></i> Mes Assurances</a>
+  <a href="{{ url_for('patient_notifications') }}" class="sidebar-link {% if 'notification' in (request.endpoint or '') %}active{% endif %}"><i class="fas fa-bell"></i> Notifications</a>
+
+  {% elif session.role == 'assureur' %}
+  <div class="sidebar-section">Espace Assureur</div>
+  <a href="{{ url_for('assureur_dashboard') }}" class="sidebar-link {% if request.endpoint=='assureur_dashboard' %}active{% endif %}"><i class="fas fa-chart-pie"></i> Tableau de bord</a>
+  <a href="{{ url_for('assureur_factures') }}" class="sidebar-link {% if 'facture' in (request.endpoint or '') %}active{% endif %}"><i class="fas fa-file-invoice-dollar"></i> Factures</a>
+  <a href="{{ url_for('assureur_contrats') }}" class="sidebar-link {% if 'contrat' in (request.endpoint or '') %}active{% endif %}"><i class="fas fa-file-contract"></i> Contrats</a>
+  <a href="{{ url_for('assureur_patients_couverts') }}" class="sidebar-link {% if 'couvert' in (request.endpoint or '') %}active{% endif %}"><i class="fas fa-users-gear"></i> Patients couverts</a>
+  {% endif %}
+
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="user-avatar">{{ session.login[0].upper() }}</div>
+      <div><div class="user-name">{{ session.login }}</div><div class="user-role">{{ session.role | capitalize }}</div></div>
+    </div>
+    <a href="{{ url_for('logout') }}" class="sidebar-link" style="margin:0;color:var(--red)"><i class="fas fa-arrow-right-from-bracket"></i> Déconnexion</a>
+  </div>
+</nav>
+
+<div class="main-content">
+  <div class="topbar">
+    <div class="topbar-title">
+      {% block page_icon %}<i class="fas fa-circle-dot"></i>{% endblock %}
+      {% block page_title %}{% endblock %}
+    </div>
+    <div class="topbar-right">
+      <span class="badge-role br-{{ session.role }}">{{ session.role | upper }}</span>
+    </div>
+  </div>
+  <div class="page-body">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}{% for cat, msg in messages %}
+      <div class="alert alert-{{ cat }} fade-in">
+        <i class="fas {% if cat=='success' %}fa-circle-check{% elif cat=='danger' %}fa-circle-xmark{% elif cat=='warning' %}fa-triangle-exclamation{% else %}fa-circle-info{% endif %}"></i>
+        <span>{{ msg }}</span>
+        <span class="alert-close" onclick="this.parentElement.remove()">×</span>
+      </div>
+      {% endfor %}{% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </div>
+</div>
+{% else %}{% block auth_content %}{% endblock %}{% endif %}
+{% block extra_js %}{% endblock %}
+</body>
+</html>

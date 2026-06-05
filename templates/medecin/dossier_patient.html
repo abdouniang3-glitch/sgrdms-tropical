@@ -1,0 +1,66 @@
+{% extends "base.html" %}{% block title %}Dossier Patient{% endblock %}
+{% block page_icon %}<i class="fas fa-folder-open" style="color:var(--green)"></i>{% endblock %}
+{% block page_title %}Dossier — {{ patient.nom_patient }} {{ patient.prenom_patient }}{% endblock %}
+{% block content %}
+<div style="display:grid;grid-template-columns:300px 1fr;gap:20px" class="fade-in">
+  <div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-header" style="background:linear-gradient(135deg,rgba(0,212,255,.1),rgba(0,229,160,.08));border-bottom:1px solid rgba(0,212,255,.15)">
+        <span><i class="fas fa-id-card"></i> Identité</span>
+      </div>
+      <div class="card-body">
+        <div style="text-align:center;margin-bottom:16px">
+          <div style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--green));display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--bg);margin:0 auto 10px">{{ patient.nom_patient[0] }}</div>
+          <div style="font-size:17px;font-weight:700">{{ patient.nom_patient }} {{ patient.prenom_patient }}</div>
+          <div style="font-size:12px;color:var(--text2)">Patient #{{ patient.id_patient }}</div>
+        </div>
+        <div class="info-block">
+          <div class="info-row"><div class="info-label">Naissance</div><div class="info-value">{{ patient.date_naissance or '—' }}</div></div>
+          <div class="info-row"><div class="info-label">Sexe</div><div class="info-value">{{ patient.sexe or '—' }}</div></div>
+          <div class="info-row"><div class="info-label">Téléphone</div><div class="info-value">{{ patient.telephone or '—' }}</div></div>
+          <div class="info-row"><div class="info-label">Email</div><div class="info-value" style="font-size:11.5px">{{ patient.mail or '—' }}</div></div>
+          <div class="info-row"><div class="info-label">Adresse</div><div class="info-value" style="font-size:12px">{{ patient.adresse or '—' }}</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" style="background:linear-gradient(135deg,rgba(255,77,109,.08),rgba(255,140,66,.06))">
+        <span><i class="fas fa-heart-pulse"></i> Données médicales</span>
+      </div>
+      <div class="card-body">
+        <div class="info-block">
+          <div class="info-row"><div class="info-label">Groupe sanguin</div><div class="info-value"><span class="badge b-danger" style="font-size:14px;font-weight:700">{{ dossier.groupe_sanguin or '—' }}</span></div></div>
+          <div class="info-row"><div class="info-label">Allergies</div><div class="info-value" style="color:var(--red);font-size:12px">{{ dossier.allergies or 'Aucune' }}</div></div>
+          <div class="info-row"><div class="info-label">Antécédents</div><div class="info-value" style="font-size:12px">{{ dossier.antecedents or 'Aucun' }}</div></div>
+          <div class="info-row"><div class="info-label">Notes</div><div class="info-value" style="font-size:12px">{{ dossier.notes or '—' }}</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-header"><span><i class="fas fa-history"></i> Historique consultations ({{ consultations|length }})</span></div>
+      {% if consultations %}
+      <table class="data-table"><thead><tr><th>Date</th><th>Motif</th><th>Diagnostic</th><th>Médecin</th></tr></thead>
+      <tbody>{% for c in consultations %}<tr>
+        <td style="font-size:12.5px">{{ c.date_rdv_prevue }}</td>
+        <td style="color:var(--text2)">{{ c.motif or '—' }}</td>
+        <td style="font-weight:600;color:var(--cyan)">{{ c.diagnostic or '—' }}</td>
+        <td>Dr {{ c.nom_medecin }}</td>
+      </tr>{% endfor %}</tbody></table>
+      {% else %}<div class="empty-state"><i class="fas fa-stethoscope"></i><p>Aucune consultation.</p></div>{% endif %}
+    </div>
+    <div class="card">
+      <div class="card-header"><span><i class="fas fa-prescription"></i> Ordonnances ({{ ordonnances|length }})</span></div>
+      {% if ordonnances %}
+      <table class="data-table"><thead><tr><th>Date</th><th>Médecin</th><th>Médicaments</th><th>Validité</th></tr></thead>
+      <tbody>{% for o in ordonnances %}<tr>
+        <td>{{ o.date_ordonnance }}</td>
+        <td>Dr {{ o.nom_medecin }}</td>
+        <td><span class="badge b-purple">{{ o.nb }}</span></td>
+        <td style="color:var(--text2)">{{ o.validite }}</td>
+      </tr>{% endfor %}</tbody></table>
+      {% else %}<div class="empty-state"><i class="fas fa-prescription"></i><p>Aucune ordonnance.</p></div>{% endif %}
+    </div>
+  </div>
+</div>{% endblock %}

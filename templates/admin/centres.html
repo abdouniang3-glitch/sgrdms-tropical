@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% block title %}Centres{% endblock %}{% block page_icon %}<i class="fas fa-hospital"></i>{% endblock %}{% block page_title %}Centres Médicaux{% endblock %}
+{% block content %}
+<div class="action-bar fade-in"><span style="color:var(--text2);font-size:13px">{{ centres|length }} centre(s)</span><a href="{{ url_for('admin_ajouter_centre') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Ajouter</a></div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px" class="fade-in-1">
+{% for c in centres %}
+<div class="card"><div class="card-body">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+    <div class="stat-icon ic-cyan"><i class="fas fa-hospital"></i></div>
+    <div><div style="font-weight:700;font-size:14px">{{ c.nom_centre }}</div><span class="badge b-info" style="margin-top:4px">{{ c.type_centre or '—' }}</span></div>
+  </div>
+  <div style="font-size:12.5px;color:var(--text2)">
+    <div style="margin-bottom:5px"><i class="fas fa-map-marker-alt" style="width:16px;color:var(--cyan)"></i> {{ c.ville or '—' }}</div>
+    <div style="margin-bottom:5px"><i class="fas fa-phone" style="width:16px;color:var(--green)"></i> {{ c.telephone or '—' }}</div>
+    <div><i class="fas fa-location-dot" style="width:16px;color:var(--text3)"></i> {{ c.adresse_centre or '—' }}</div>
+  </div>
+</div></div>
+{% else %}<div class="card"><div class="card-body"><div class="empty-state"><i class="fas fa-hospital"></i><p>Aucun centre.</p></div></div></div>{% endfor %}
+</div>{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}{% block title %}Prendre Rendez-vous{% endblock %}
+{% block page_icon %}<i class="fas fa-calendar-plus" style="color:var(--purple)"></i>{% endblock %}
+{% block page_title %}Prendre un Rendez-vous{% endblock %}
+{% block content %}<div style="max-width:640px"><form method="POST" class="fade-in">
+  <div class="card" style="margin-bottom:20px"><div class="card-header"><span><i class="fas fa-calendar-plus"></i> Nouveau rendez-vous</span></div>
+  <div class="card-body">
+    <div class="form-row form-row-2">
+      <div class="form-group"><label class="form-label">Médecin *</label>
+        <select name="id_medecin" class="form-select" required>
+          <option value="">— Choisir un médecin —</option>
+          {% for m in medecins %}<option value="{{ m.id_medecin }}">Dr {{ m.nom_medecin }} {{ m.prenom_medecin }} — {{ m.specialite or 'Généraliste' }}</option>{% endfor %}
+        </select></div>
+      <div class="form-group"><label class="form-label">Service *</label>
+        <select name="id_service" class="form-select" required>
+          <option value="">— Choisir un service —</option>
+          {% for s in services %}<option value="{{ s.id_service }}">{{ s.nom_service }} ({{ s.nom_centre }})</option>{% endfor %}
+        </select></div>
+      <div class="form-group"><label class="form-label">Date souhaitée *</label><input type="date" name="date_rdv" class="form-control" required></div>
+      <div class="form-group"><label class="form-label">Heure</label><input type="time" name="heure" class="form-control"></div>
+      <div class="form-group"><label class="form-label">Type de consultation</label>
+        <select name="type_rdv" class="form-select"><option value="présentiel">Présentiel</option><option value="téléconsultation">Téléconsultation</option></select></div>
+      <div class="form-group" style="grid-column:span 2"><label class="form-label">Motif de la consultation</label>
+        <textarea name="motif" class="form-control" rows="3" placeholder="Décrivez brièvement votre motif..."></textarea></div>
+    </div>
+  </div></div>
+  <div style="display:flex;gap:12px">
+    <button type="submit" class="btn btn-success"><i class="fas fa-calendar-check"></i> Confirmer le rendez-vous</button>
+    <a href="{{ url_for('patient_rendez_vous') }}" class="btn btn-ghost">Annuler</a>
+  </div>
+</form></div>{% endblock %}

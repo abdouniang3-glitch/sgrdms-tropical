@@ -1,0 +1,22 @@
+{% extends "base.html" %}{% block title %}Téléconsultations{% endblock %}
+{% block page_icon %}<i class="fas fa-video" style="color:var(--green)"></i>{% endblock %}
+{% block page_title %}Mes Téléconsultations{% endblock %}
+{% block content %}
+<div class="card fade-in"><div class="table-wrap">
+{% if teleconsults %}
+<table class="data-table">
+  <thead><tr><th>#</th><th>Date/Heure</th><th>Patient</th><th>Durée</th><th>Statut</th><th>Enregistrement</th><th>Lien vidéo</th></tr></thead>
+  <tbody>{% for t in teleconsults %}<tr>
+    <td style="color:var(--text3)">{{ t.id_session }}</td>
+    <td>{{ t.heure }}</td>
+    <td><strong>{{ t.nom_patient }} {{ t.prenom_patient }}</strong></td>
+    <td>{{ t.duree or '—' }} min</td>
+    <td>{% if t.statut=='terminée' %}<span class="badge b-success">Terminée</span>
+        {% elif t.statut=='en cours' %}<span class="badge b-danger"><i class="fas fa-circle" style="font-size:8px"></i> En cours</span>
+        {% else %}<span class="badge b-warning">{{ t.statut }}</span>{% endif %}</td>
+    <td>{% if t.enregistrement %}<span class="badge b-info"><i class="fas fa-circle-dot"></i> Oui</span>{% else %}<span class="badge b-muted">Non</span>{% endif %}</td>
+    <td>{% if t.url_video %}<a href="{{ t.url_video }}" target="_blank" class="btn btn-ghost btn-sm"><i class="fas fa-video"></i> Rejoindre</a>{% else %}<span style="color:var(--text3)">—</span>{% endif %}</td>
+  </tr>{% endfor %}</tbody>
+</table>
+{% else %}<div class="empty-state"><i class="fas fa-video"></i><p>Aucune téléconsultation enregistrée.</p></div>{% endif %}
+</div></div>{% endblock %}

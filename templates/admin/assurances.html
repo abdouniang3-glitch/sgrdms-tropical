@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block title %}Assurances{% endblock %}{% block page_icon %}<i class="fas fa-shield-halved"></i>{% endblock %}{% block page_title %}Gestion des Assurances{% endblock %}
+{% block content %}
+<div class="action-bar fade-in"><span style="color:var(--text2);font-size:13px">{{ assurances|length }} contrat(s)</span><a href="{{ url_for('admin_ajouter_assurance') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Ajouter</a></div>
+<div class="card fade-in-1"><div class="table-wrap"><table class="data-table">
+  <thead><tr><th>#</th><th>Compagnie</th><th>N° Contrat</th><th>Taux</th><th>Type</th><th>Validité</th><th>Statut</th><th>Tiers payant</th></tr></thead>
+  <tbody>{% for a in assurances %}<tr>
+    <td style="color:var(--text3)">{{ a.id_assurance }}</td>
+    <td><strong>{{ a.nom_compagnie }}</strong></td><td style="color:var(--text2)">{{ a.numero_contrat }}</td>
+    <td><span class="badge b-success">{{ a.taux_prise_charge }}%</span></td>
+    <td>{{ a.type_assurance }}</td>
+    <td style="font-size:12px;color:var(--text2)">{{ a.date_debut }} → {{ a.fin_couverture }}</td>
+    <td>{% if a.statut=='active' %}<span class="badge b-success">Active</span>{% else %}<span class="badge b-muted">{{ a.statut }}</span>{% endif %}</td>
+    <td>{% if a.statut_tiers_pay %}<span class="badge b-info"><i class="fas fa-check"></i> Oui</span>{% else %}<span class="badge b-muted">Non</span>{% endif %}</td>
+  </tr>{% else %}<tr><td colspan="8"><div class="empty-state"><i class="fas fa-shield-halved"></i><p>Aucune assurance.</p></div></td></tr>{% endfor %}</tbody>
+</table></div></div>{% endblock %}

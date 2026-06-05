@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}Dashboard Admin — SGRDMS{% endblock %}
+{% block page_icon %}<i class="fas fa-chart-pie" style="color:var(--cyan)"></i>{% endblock %}
+{% block page_title %}Tableau de bord{% endblock %}
+{% block content %}
+<div class="stat-grid stat-grid-4 fade-in" style="margin-bottom:20px">
+  <div class="stat-card cyan">
+    <div class="stat-header">
+      <div><div class="stat-value">{{ stats.patients }}</div><div class="stat-label">Patients enregistrés</div></div>
+      <div class="stat-icon ic-cyan"><i class="fas fa-users"></i></div>
+    </div>
+  </div>
+  <div class="stat-card green">
+    <div class="stat-header">
+      <div><div class="stat-value">{{ stats.medecins }}</div><div class="stat-label">Médecins actifs</div></div>
+      <div class="stat-icon ic-green"><i class="fas fa-user-md"></i></div>
+    </div>
+  </div>
+  <div class="stat-card orange">
+    <div class="stat-header">
+      <div><div class="stat-value">{{ stats.rdv_today }}</div><div class="stat-label">RDV aujourd'hui</div></div>
+      <div class="stat-icon ic-orange"><i class="fas fa-calendar-day"></i></div>
+    </div>
+  </div>
+  <div class="stat-card red">
+    <div class="stat-header">
+      <div><div class="stat-value">{{ stats.factures_impayees }}</div><div class="stat-label">Factures impayées</div></div>
+      <div class="stat-icon ic-red"><i class="fas fa-receipt"></i></div>
+    </div>
+  </div>
+  <div class="stat-card purple fade-in-1">
+    <div class="stat-header">
+      <div><div class="stat-value">{{ stats.utilisateurs }}</div><div class="stat-label">Utilisateurs système</div></div>
+      <div class="stat-icon ic-purple"><i class="fas fa-user-gear"></i></div>
+    </div>
+  </div>
+  <div class="stat-card gold fade-in-2">
+    <div class="stat-header">
+      <div><div class="stat-value">{{ stats.centres }}</div><div class="stat-label">Centres médicaux</div></div>
+      <div class="stat-icon ic-gold"><i class="fas fa-hospital"></i></div>
+    </div>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:2fr 1fr;gap:20px" class="fade-in-2">
+  <div class="card">
+    <div class="card-header">
+      <span><i class="fas fa-bolt"></i> Actions rapides</span>
+    </div>
+    <div class="card-body">
+      <div class="quick-actions">
+        <a href="{{ url_for('admin_ajouter_patient') }}" class="qa-btn">
+          <i class="fas fa-user-plus"></i><span>Nouveau patient</span>
+        </a>
+        <a href="{{ url_for('admin_ajouter_rdv') }}" class="qa-btn">
+          <i class="fas fa-calendar-plus"></i><span>Planifier RDV</span>
+        </a>
+        <a href="{{ url_for('admin_ajouter_medecin') }}" class="qa-btn">
+          <i class="fas fa-user-md"></i><span>Ajouter médecin</span>
+        </a>
+        <a href="{{ url_for('admin_ajouter_centre') }}" class="qa-btn">
+          <i class="fas fa-hospital"></i><span>Nouveau centre</span>
+        </a>
+        <a href="{{ url_for('admin_ajouter_assurance') }}" class="qa-btn">
+          <i class="fas fa-shield-halved"></i><span>Ajouter assurance</span>
+        </a>
+        <a href="{{ url_for('admin_historique') }}" class="qa-btn">
+          <i class="fas fa-clock-rotate-left"></i><span>Journal audit</span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><span><i class="fas fa-link"></i> Navigation</span></div>
+    <div class="card-body-flush">
+      {% for label, icon, ep in [
+          ('Utilisateurs','fa-user-gear','admin_utilisateurs'),
+          ('Liste patients','fa-users','admin_patients'),
+          ('Médecins','fa-user-md','admin_medecins'),
+          ('Tous les RDV','fa-calendar','admin_rendez_vous'),
+          ('Assurances','fa-shield-halved','admin_assurances'),
+          ('Centres médicaux','fa-hospital','admin_centres')
+      ] %}
+      <a href="{{ url_for(ep) }}" style="display:flex;justify-content:space-between;align-items:center;padding:13px 18px;border-bottom:1px solid var(--border);color:var(--text2);text-decoration:none;transition:all .15s;font-size:13.5px"
+         onmouseover="this.style.background='var(--glass)';this.style.color='var(--text)'" onmouseout="this.style.background='';this.style.color='var(--text2)'">
+        <span><i class="fas {{ icon }} me-2" style="color:var(--cyan);width:16px"></i> {{ label }}</span>
+        <i class="fas fa-chevron-right" style="font-size:11px"></i>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

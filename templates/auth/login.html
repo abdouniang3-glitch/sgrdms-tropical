@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion — SGRDMS</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      min-height:100vh; display:flex; align-items:center; justify-content:center;
+      background: var(--bg);
+      background-image:
+        radial-gradient(ellipse at 20% 50%, rgba(0,212,255,.07) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(0,229,160,.06) 0%, transparent 50%);
+    }
+    .login-wrap { width: 100%; max-width: 440px; padding: 20px; }
+    .login-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 20px; padding: 40px;
+      box-shadow: 0 30px 80px rgba(0,0,0,.5);
+    }
+    .login-logo {
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 12px; margin-bottom: 32px; text-align: center;
+    }
+    .login-logo .icon {
+      width: 64px; height: 64px; border-radius: 18px;
+      background: linear-gradient(135deg, var(--cyan), var(--green));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; color: var(--bg);
+      box-shadow: 0 8px 30px rgba(0,212,255,.35);
+    }
+    .login-logo h1 {
+      font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800;
+      background: linear-gradient(135deg, var(--cyan), var(--green));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .login-logo p { font-size: 13px; color: var(--text2); }
+    .demo-table {
+      width: 100%; border-collapse: collapse; font-size: 12px;
+      margin-top: 12px;
+    }
+    .demo-table th {
+      padding: 7px 10px; text-align: left; color: var(--text3);
+      font-weight: 600; border-bottom: 1px solid var(--border);
+    }
+    .demo-table td {
+      padding: 7px 10px; color: var(--text2);
+      border-bottom: 1px solid rgba(255,255,255,.03);
+    }
+    .demo-table tr:last-child td { border-bottom: none; }
+    .demo-toggle {
+      text-align: center; margin-top: 16px;
+      font-size: 12px; color: var(--text3); cursor: pointer;
+      text-decoration: underline;
+    }
+    .demo-panel { display: none; margin-top: 12px; }
+    .demo-panel.open { display: block; }
+  </style>
+</head>
+<body>
+<div class="login-wrap">
+  <div class="login-card fade-in">
+    <div class="login-logo">
+      <div class="icon"><i class="fas fa-heartbeat"></i></div>
+      <div>
+        <h1>SGRDMS</h1>
+        <p>Système de Gestion — Centre LE TROPICAL</p>
+      </div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for cat, msg in messages %}
+      <div class="alert alert-{{ cat }}">
+        <i class="fas fa-circle-xmark"></i>
+        <span>{{ msg }}</span>
+      </div>
+      {% endfor %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('login') }}">
+      <div class="form-group">
+        <label class="form-label">Identifiant</label>
+        <div class="input-icon">
+          <i class="fas fa-user"></i>
+          <input type="text" name="login" class="form-control" placeholder="Votre login" required autofocus>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mot de passe</label>
+        <div class="input-icon">
+          <i class="fas fa-lock"></i>
+          <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;margin-top:8px">
+        <i class="fas fa-arrow-right-to-bracket"></i> Se connecter
+      </button>
+    </form>
+
+    <div class="demo-toggle" onclick="document.getElementById('demo').classList.toggle('open')">
+      <i class="fas fa-key"></i> Afficher les comptes de démonstration
+    </div>
+    <div class="demo-panel" id="demo">
+      <table class="demo-table">
+        <thead><tr><th>Login</th><th>Mot de passe</th><th>Rôle</th></tr></thead>
+        <tbody>
+          <tr><td>admin</td><td>admin123</td><td><span class="badge b-info">Admin</span></td></tr>
+          <tr><td>dr.diallo</td><td>medecin123</td><td><span class="badge b-success">Médecin</span></td></tr>
+          <tr><td>pharma1</td><td>pharma123</td><td><span class="badge" style="background:rgba(255,209,102,.15);color:var(--gold)">Pharmacien</span></td></tr>
+          <tr><td>patient1</td><td>patient123</td><td><span class="badge b-purple">Patient</span></td></tr>
+          <tr><td>assureur1</td><td>assureur123</td><td><span class="badge" style="background:rgba(255,140,66,.15);color:var(--orange)">Assureur</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</body>
+</html>

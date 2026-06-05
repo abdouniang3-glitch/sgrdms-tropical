@@ -1,0 +1,32 @@
+{% extends "base.html" %}{% block title %}Ordonnance #{{ ordonnance.id_ordonnance }}{% endblock %}
+{% block page_icon %}<i class="fas fa-file-prescription" style="color:var(--gold)"></i>{% endblock %}
+{% block page_title %}Ordonnance #{{ ordonnance.id_ordonnance }}{% endblock %}
+{% block content %}
+<div style="display:grid;grid-template-columns:280px 1fr;gap:20px" class="fade-in">
+  <div class="card"><div class="card-header"><span><i class="fas fa-info-circle"></i> Informations</span></div>
+  <div class="card-body">
+    <div class="info-block">
+      <div class="info-row"><div class="info-label">Patient</div><div class="info-value">{{ ordonnance.nom_patient }} {{ ordonnance.prenom_patient }}</div></div>
+      <div class="info-row"><div class="info-label">Médecin</div><div class="info-value">Dr {{ ordonnance.nom_medecin }}</div></div>
+      <div class="info-row"><div class="info-label">Date</div><div class="info-value">{{ ordonnance.date_ordonnance }}</div></div>
+      <div class="info-row"><div class="info-label">Validité</div><div class="info-value"><span class="badge b-info">{{ ordonnance.validite }}</span></div></div>
+      <div class="info-row"><div class="info-label">Instructions</div><div class="info-value" style="font-size:12px">{{ ordonnance.instructions or '—' }}</div></div>
+    </div>
+  </div></div>
+  <div class="card"><div class="card-header"><span><i class="fas fa-pills"></i> Lignes d'ordonnance ({{ lignes|length }})</span></div>
+  <div class="table-wrap"><table class="data-table">
+    <thead><tr><th>Médicament</th><th>Forme</th><th>Dosage</th><th>Posologie</th><th>Durée</th><th>Qté</th><th>Stock dispo</th></tr></thead>
+    <tbody>{% for l in lignes %}<tr>
+      <td><strong>{{ l.nom_medicament }}</strong></td>
+      <td><span class="badge b-muted">{{ l.forme or '—' }}</span></td>
+      <td style="color:var(--text2)">{{ l.dosage or '—' }}</td>
+      <td>{{ l.posologie }}</td>
+      <td>{{ l.duree_traitement }} j</td>
+      <td>{{ l.quantite }}</td>
+      <td>{% if l.quantite_dispo is not none %}
+        {% if l.quantite_dispo < l.quantite %}<strong style="color:var(--red)">{{ l.quantite_dispo }} ⚠</strong>
+        {% else %}<strong style="color:var(--green)">{{ l.quantite_dispo }}</strong>{% endif %}
+      {% else %}<span style="color:var(--text3)">—</span>{% endif %}</td>
+    </tr>{% endfor %}</tbody>
+  </table></div></div>
+</div>{% endblock %}

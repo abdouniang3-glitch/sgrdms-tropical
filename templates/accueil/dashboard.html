@@ -1,0 +1,62 @@
+{% extends "base.html" %}{% block title %}Accueil Dashboard{% endblock %}
+{% block page_icon %}<i class="fas fa-door-open" style="color:var(--cyan)"></i>{% endblock %}
+{% block page_title %}Accueil — {{ session.login }}{% endblock %}
+{% block content %}
+<div class="stat-grid stat-grid-4 fade-in" style="margin-bottom:20px">
+  <div class="stat-card cyan"><div class="stat-header"><div><div class="stat-value">{{ stats.patients }}</div><div class="stat-label">Patients enregistrés</div></div><div class="stat-icon ic-cyan"><i class="fas fa-users"></i></div></div></div>
+  <div class="stat-card orange"><div class="stat-header"><div><div class="stat-value">{{ stats.rdv_today }}</div><div class="stat-label">RDV aujourd'hui</div></div><div class="stat-icon ic-orange"><i class="fas fa-calendar-day"></i></div></div></div>
+  <div class="stat-card red"><div class="stat-header"><div><div class="stat-value">{{ stats.urgences }}</div><div class="stat-label">Urgences actives</div></div><div class="stat-icon ic-red"><i class="fas fa-truck-medical"></i></div></div></div>
+  <div class="stat-card gold"><div class="stat-header"><div><div class="stat-value">{{ stats.attente }}</div><div class="stat-label">En liste d'attente</div></div><div class="stat-icon ic-gold"><i class="fas fa-clock"></i></div></div></div>
+</div>
+
+<div style="display:grid;grid-template-columns:2fr 1fr;gap:20px" class="fade-in-1">
+  <div class="card">
+    <div class="card-header"><span><i class="fas fa-calendar-day"></i> RDV d'aujourd'hui ({{ rdvs_today|length }})</span></div>
+    <div class="table-wrap">
+    {% if rdvs_today %}
+    <table class="data-table">
+      <thead><tr><th>Heure</th><th>Patient</th><th>Médecin</th><th>Motif</th><th>Statut</th></tr></thead>
+      <tbody>{% for r in rdvs_today %}<tr>
+        <td style="color:var(--cyan);font-weight:700">{{ r.heure or '—' }}</td>
+        <td><strong>{{ r.nom_patient }} {{ r.prenom_patient }}</strong></td>
+        <td>Dr {{ r.nom_medecin }}</td>
+        <td style="color:var(--text2);font-size:12.5px">{{ r.motif or '—' }}</td>
+        <td>{% if r.statut_rdv=='effectué' %}<span class="badge b-success">Effectué</span>
+            {% elif r.statut_rdv=='confirmé' %}<span class="badge b-info">Confirmé</span>
+            {% else %}<span class="badge b-warning">{{ r.statut_rdv }}</span>{% endif %}</td>
+      </tr>{% endfor %}</tbody>
+    </table>
+    {% else %}<div class="empty-state"><i class="fas fa-calendar-check"></i><p>Aucun RDV aujourd'hui.</p></div>{% endif %}
+    </div>
+  </div>
+  <div>
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-header"><span><i class="fas fa-bolt"></i> Actions rapides</span></div>
+      <div class="card-body" style="display:flex;flex-direction:column;gap:8px">
+        <a href="{{ url_for('accueil_ajouter_patient') }}" class="btn btn-primary" style="justify-content:center"><i class="fas fa-user-plus"></i> Enregistrer patient</a>
+        <a href="{{ url_for('accueil_ajouter_rdv') }}" class="btn btn-success" style="justify-content:center"><i class="fas fa-calendar-plus"></i> Planifier RDV</a>
+        <a href="{{ url_for('accueil_urgences') }}" class="btn btn-danger" style="justify-content:center"><i class="fas fa-truck-medical"></i> Urgence</a>
+        <a href="{{ url_for('accueil_liste_attente') }}" class="btn btn-ghost" style="justify-content:center"><i class="fas fa-clock"></i> Liste d'attente</a>
+      </div>
+    </div>
+    {% if urgences_actives %}
+    <div class="card" style="border-color:rgba(255,77,109,.3)">
+      <div class="card-header" style="background:rgba(255,77,109,.08)"><span style="color:var(--red)"><i class="fas fa-truck-medical"></i> Urgences actives</span></div>
+      <div class="card-body-flush">
+        {% for u in urgences_actives %}
+        <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-weight:600;font-size:13px">{{ u.nom_patient }} {{ u.prenom_patient }}</div>
+            <div style="font-size:12px;color:var(--text2)">{{ u.motif[:40] }}...</div>
+          </div>
+          {% if u.niveau_triage=='critique' %}<span class="badge b-danger">Critique</span>
+          {% elif u.niveau_triage=='urgent' %}<span class="badge b-warning">Urgent</span>
+          {% else %}<span class="badge b-info">Moyen</span>{% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

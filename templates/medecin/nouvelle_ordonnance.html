@@ -1,0 +1,52 @@
+{% extends "base.html" %}{% block title %}Nouvelle Ordonnance{% endblock %}
+{% block page_icon %}<i class="fas fa-prescription" style="color:var(--green)"></i>{% endblock %}
+{% block page_title %}Émettre une Ordonnance{% endblock %}
+{% block content %}
+<div class="alert alert-info fade-in"><i class="fas fa-user"></i><span><strong>Patient :</strong> {{ consult.nom_patient }} {{ consult.prenom_patient }} — Consultation #{{ consult.id_consultation }}</span></div>
+<form method="POST" class="fade-in-1">
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-header"><span><i class="fas fa-file-prescription"></i> En-tête ordonnance</span></div>
+    <div class="card-body">
+      <div class="form-row form-row-2">
+        <div class="form-group"><label class="form-label">Validité</label><input type="text" name="validite" class="form-control" value="3 mois"></div>
+        <div class="form-group"><label class="form-label">Instructions particulières</label><input type="text" name="instructions" class="form-control" placeholder="Prendre avec de l'eau, éviter alcool..."></div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-header"><span><i class="fas fa-pills"></i> Médicaments prescrits</span>
+      <button type="button" class="btn btn-ghost btn-sm" onclick="ajouterLigne()"><i class="fas fa-plus"></i> Ajouter</button></div>
+    <div class="card-body" id="lignes-medic">
+      <div class="med-line">
+        <div class="form-row form-row-4">
+          <div class="form-group" style="grid-column:span 2"><label class="form-label">Médicament *</label>
+            <select name="id_medicament[]" class="form-select" required>
+              {% for m in medicaments %}<option value="{{ m.id_medicament }}">{{ m.nom_medicament }} — {{ m.dosage or '' }}</option>{% endfor %}
+            </select></div>
+          <div class="form-group"><label class="form-label">Posologie</label><input type="text" name="posologie[]" class="form-control" placeholder="2×/jour"></div>
+          <div class="form-group"><label class="form-label">Durée (jours)</label><input type="number" name="duree[]" class="form-control" value="7" min="1"></div>
+          <div class="form-group"><label class="form-label">Quantité</label><input type="number" name="quantite[]" class="form-control" value="1" min="1"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;gap:12px">
+    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Enregistrer l'ordonnance</button>
+    <a href="{{ url_for('medecin_consultation_detail', id_consult=consult.id_consultation) }}" class="btn btn-ghost">Annuler</a>
+  </div>
+</form>
+<script>
+const medsData = {{ medicaments | tojson }};
+function ajouterLigne() {
+  const opts = medsData.map(m => `<option value="${m.id_medicament}">${m.nom_medicament} — ${m.dosage||''}</option>`).join('');
+  const div = document.createElement('div'); div.className = 'med-line';
+  div.innerHTML = `<div class="form-row form-row-4">
+    <div class="form-group" style="grid-column:span 2"><label class="form-label">Médicament *</label><select name="id_medicament[]" class="form-select" required>${opts}</select></div>
+    <div class="form-group"><label class="form-label">Posologie</label><input type="text" name="posologie[]" class="form-control" placeholder="2×/jour"></div>
+    <div class="form-group"><label class="form-label">Durée (j)</label><input type="number" name="duree[]" class="form-control" value="7" min="1"></div>
+    <div class="form-group"><label class="form-label">Quantité</label><input type="number" name="quantite[]" class="form-control" value="1" min="1"></div>
+    <div class="form-group" style="display:flex;align-items:flex-end"><button type="button" class="btn btn-danger btn-icon" onclick="this.closest('.med-line').remove()"><i class="fas fa-trash"></i></button></div>
+  </div>`;
+  document.getElementById('lignes-medic').appendChild(div);
+}
+</script>{% endblock %}

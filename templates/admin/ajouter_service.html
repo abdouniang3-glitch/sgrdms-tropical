@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% block title %}Ajouter Service{% endblock %}
+{% block page_icon %}<i class="fas fa-plus"></i>{% endblock %}
+{% block page_title %}Nouveau Service Médical{% endblock %}
+{% block content %}<div style="max-width:480px"><form method="POST" class="fade-in">
+  <div class="card" style="margin-bottom:20px"><div class="card-header"><span><i class="fas fa-stethoscope"></i> Nouveau service</span></div>
+  <div class="card-body">
+    <div class="form-group"><label class="form-label">Nom du service *</label>
+      <input type="text" name="nom_service" class="form-control" required placeholder="ex: Pédiatrie, Cardiologie..."></div>
+    <div class="form-group"><label class="form-label">Centre médical *</label>
+      <select name="id_centre" class="form-select" required>
+        {% for c in centres %}<option value="{{ c.id_centre }}">{{ c.nom_centre }}</option>{% endfor %}
+      </select></div>
+  </div></div>
+  <div style="display:flex;gap:12px">
+    <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Enregistrer</button>
+    <a href="{{ url_for('admin_services') }}" class="btn btn-ghost">Annuler</a>
+  </div>
+</form></div>{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}{% block title %}Rendez-vous — Accueil{% endblock %}
+{% block page_icon %}<i class="fas fa-calendar-check" style="color:var(--cyan)"></i>{% endblock %}
+{% block page_title %}Gestion des Rendez-vous{% endblock %}
+{% block content %}
+<div class="action-bar fade-in">
+  <span style="color:var(--text2);font-size:13px">{{ rdvs|length }} rendez-vous</span>
+  <a href="{{ url_for('accueil_ajouter_rdv') }}" class="btn btn-primary"><i class="fas fa-calendar-plus"></i> Planifier RDV</a>
+</div>
+<div class="card fade-in-1"><div class="table-wrap"><table class="data-table">
+  <thead><tr><th>Date</th><th>Heure</th><th>Patient</th><th>Médecin</th><th>Service</th><th>Motif</th><th>Type</th><th>Statut</th></tr></thead>
+  <tbody>{% for r in rdvs %}<tr>
+    <td style="font-weight:600">{{ r.date_rdv_prevue }}</td>
+    <td style="color:var(--cyan);font-weight:600">{{ r.heure or '—' }}</td>
+    <td><strong>{{ r.nom_patient }} {{ r.prenom_patient }}</strong></td>
+    <td>Dr {{ r.nom_medecin }}</td>
+    <td style="color:var(--text2)">{{ r.nom_service }}</td>
+    <td style="color:var(--text2);font-size:12.5px">{{ r.motif or '—' }}</td>
+    <td><span class="badge b-info">{{ r.type_rdv }}</span></td>
+    <td>{% if r.statut_rdv=='effectué' %}<span class="badge b-success">Effectué</span>
+        {% elif r.statut_rdv=='annulé' %}<span class="badge b-danger">Annulé</span>
+        {% elif r.statut_rdv=='confirmé' %}<span class="badge b-info">Confirmé</span>
+        {% else %}<span class="badge b-warning">{{ r.statut_rdv }}</span>{% endif %}</td>
+  </tr>{% else %}<tr><td colspan="8"><div class="empty-state"><i class="fas fa-calendar"></i><p>Aucun rendez-vous.</p></div></td></tr>{% endfor %}</tbody>
+</table></div></div>
+{% endblock %}

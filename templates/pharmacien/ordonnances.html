@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block title %}Ordonnances{% endblock %}
+{% block page_icon %}<i class="fas fa-file-prescription" style="color:var(--gold)"></i>{% endblock %}
+{% block page_title %}Ordonnances à dispenser{% endblock %}
+{% block content %}<div class="card fade-in"><div class="table-wrap"><table class="data-table">
+  <thead><tr><th>#</th><th>Date</th><th>Patient</th><th>Médecin</th><th>Médicaments</th><th>Validité</th><th>Détail</th></tr></thead>
+  <tbody>{% for o in ordonnances %}<tr>
+    <td style="color:var(--text3)">{{ o.id_ordonnance }}</td>
+    <td>{{ o.date_ordonnance }}</td>
+    <td><strong>{{ o.nom_patient }} {{ o.prenom_patient }}</strong></td>
+    <td>Dr {{ o.nom_medecin }}</td>
+    <td><span class="badge b-purple">{{ o.nb_medic }} médicament(s)</span></td>
+    <td style="color:var(--text2)">{{ o.validite }}</td>
+    <td><a href="{{ url_for('pharmacien_detail_ordonnance', id_ord=o.id_ordonnance) }}" class="btn btn-ghost btn-sm"><i class="fas fa-eye"></i> Voir</a></td>
+  </tr>{% else %}<tr><td colspan="7"><div class="empty-state"><i class="fas fa-file-prescription"></i><p>Aucune ordonnance.</p></div></td></tr>{% endfor %}</tbody>
+</table></div></div>{% endblock %}

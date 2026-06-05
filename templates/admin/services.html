@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% block title %}Services{% endblock %}
+{% block page_icon %}<i class="fas fa-stethoscope"></i>{% endblock %}
+{% block page_title %}Services Médicaux{% endblock %}
+{% block content %}
+<div class="action-bar fade-in">
+  <span style="color:var(--text2);font-size:13px">{{ services|length }} service(s)</span>
+  <a href="{{ url_for('admin_ajouter_service') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Ajouter service</a>
+</div>
+<div class="card fade-in-1"><div class="table-wrap"><table class="data-table">
+  <thead><tr><th>#</th><th>Nom du service</th><th>Centre médical</th></tr></thead>
+  <tbody>{% for s in services %}<tr>
+    <td style="color:var(--text3)">{{ s.id_service }}</td>
+    <td><strong>{{ s.nom_service }}</strong></td>
+    <td><span class="badge b-info">{{ s.nom_centre }}</span></td>
+  </tr>{% else %}<tr><td colspan="3"><div class="empty-state"><i class="fas fa-stethoscope"></i><p>Aucun service.</p></div></td></tr>{% endfor %}</tbody>
+</table></div></div>
+{% endblock %}

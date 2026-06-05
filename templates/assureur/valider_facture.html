@@ -1,0 +1,43 @@
+{% extends "base.html" %}{% block title %}Valider Remboursement{% endblock %}
+{% block page_icon %}<i class="fas fa-check-circle" style="color:var(--orange)"></i>{% endblock %}
+{% block page_title %}Valider le Remboursement{% endblock %}
+{% block content %}
+<div style="max-width:620px">
+<div class="card fade-in" style="margin-bottom:16px;border-color:rgba(0,212,255,.2)">
+  <div class="card-header" style="background:rgba(0,212,255,.06)"><span><i class="fas fa-file-invoice"></i> Facture #{{ facture.id_facture }}</span></div>
+  <div class="card-body">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div class="info-block">
+        <div class="info-row"><div class="info-label">Patient</div><div class="info-value">{{ facture.nom_patient }} {{ facture.prenom_patient }}</div></div>
+        <div class="info-row"><div class="info-label">Assurance</div><div class="info-value">{{ facture.nom_compagnie }}</div></div>
+        <div class="info-row"><div class="info-label">Date</div><div class="info-value">{{ facture.date_facture }}</div></div>
+      </div>
+      <div style="text-align:center;padding:16px;background:var(--bg3);border-radius:var(--radius-sm)">
+        <div style="font-size:12px;color:var(--text2);margin-bottom:8px">Montant total</div>
+        <div style="font-size:28px;font-weight:800;font-family:'Syne',sans-serif">{{ facture.montant_total }} F</div>
+        <div style="margin-top:10px;font-size:12px;color:var(--green)">Taux assurance : <strong>{{ facture.taux_prise_charge }}%</strong></div>
+        <div style="font-size:18px;font-weight:700;color:var(--green);margin-top:4px">→ {{ (facture.montant_total * facture.taux_prise_charge / 100)|int }} F</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card fade-in-1">
+  <div class="card-header"><span><i class="fas fa-pen-to-square"></i> Saisir le remboursement</span></div>
+  <div class="card-body">
+  <form method="POST">
+    <div class="form-group">
+      <label class="form-label">Montant pris en charge par l'assurance (FCFA) *</label>
+      <input type="number" name="montant_assurance" class="form-control" style="font-size:20px;font-weight:700;height:56px;text-align:center"
+             value="{{ (facture.montant_total * facture.taux_prise_charge / 100)|int }}"
+             min="0" max="{{ facture.montant_total }}" required>
+      <div style="font-size:12px;color:var(--text2);margin-top:6px">Maximum autorisé : {{ facture.montant_total }} FCFA</div>
+    </div>
+    <div class="divider"></div>
+    <div style="display:flex;gap:12px">
+      <button type="submit" class="btn btn-success btn-lg"><i class="fas fa-check"></i> Valider le remboursement</button>
+      <a href="{{ url_for('assureur_factures') }}" class="btn btn-ghost btn-lg">Annuler</a>
+    </div>
+  </form>
+  </div>
+</div>
+</div>{% endblock %}

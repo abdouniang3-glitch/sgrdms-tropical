@@ -1,0 +1,42 @@
+{% extends "base.html" %}{% block title %}Mon Espace Patient{% endblock %}
+{% block page_icon %}<i class="fas fa-house" style="color:var(--purple)"></i>{% endblock %}
+{% block page_title %}Bienvenue, {{ patient.prenom_patient }} {{ patient.nom_patient }}{% endblock %}
+{% block content %}
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px" class="fade-in">
+  <div class="card">
+    <div class="card-header" style="background:linear-gradient(135deg,rgba(0,212,255,.08),rgba(0,229,160,.05))">
+      <span><i class="fas fa-calendar-check"></i> Prochains RDV ({{ rdvs|length }})</span>
+      <a href="{{ url_for('patient_prendre_rdv') }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Prendre RDV</a>
+    </div>
+    {% if rdvs %}
+    <table class="data-table"><thead><tr><th>Date</th><th>Médecin</th><th>Spécialité</th><th>Statut</th></tr></thead>
+    <tbody>{% for r in rdvs %}<tr>
+      <td style="font-weight:600;color:var(--cyan)">{{ r.date_rdv_prevue }}</td>
+      <td>Dr {{ r.nom_medecin }}</td>
+      <td style="font-size:12px;color:var(--text2)">{{ r.specialite }}</td>
+      <td><span class="badge b-warning">{{ r.statut_rdv }}</span></td>
+    </tr>{% endfor %}</tbody></table>
+    {% else %}<div class="empty-state" style="padding:30px 20px"><i class="fas fa-calendar"></i><p>Aucun rendez-vous prévu.</p></div>{% endif %}
+  </div>
+  <div class="card">
+    <div class="card-header" style="background:linear-gradient(135deg,rgba(255,77,109,.08),rgba(255,140,66,.05))">
+      <span><i class="fas fa-receipt"></i> Factures en attente ({{ factures|length }})</span>
+      <a href="{{ url_for('patient_factures') }}" class="btn btn-ghost btn-sm">Voir tout</a>
+    </div>
+    {% if factures %}
+    <table class="data-table"><thead><tr><th>Date</th><th>Total</th><th>Restant dû</th><th>Statut</th></tr></thead>
+    <tbody>{% for f in factures %}<tr>
+      <td>{{ f.date_facture }}</td>
+      <td>{{ f.montant_total }} F</td>
+      <td style="font-weight:700;color:var(--red)">{{ f.montant_restant }} F</td>
+      <td><span class="badge b-danger">En attente</span></td>
+    </tr>{% endfor %}</tbody></table>
+    {% else %}<div class="empty-state" style="padding:30px 20px"><i class="fas fa-circle-check" style="color:var(--green);opacity:1"></i><p style="color:var(--green)">Aucune facture en attente.</p></div>{% endif %}
+  </div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px" class="fade-in-2">
+  <a href="{{ url_for('patient_dossier') }}" class="qa-btn"><i class="fas fa-folder-open" style="color:var(--cyan)"></i><span>Mon Dossier</span></a>
+  <a href="{{ url_for('patient_ordonnances') }}" class="qa-btn"><i class="fas fa-file-medical" style="color:var(--green)"></i><span>Mes Ordonnances</span></a>
+  <a href="{{ url_for('patient_assurances') }}" class="qa-btn"><i class="fas fa-shield-halved" style="color:var(--gold)"></i><span>Mes Assurances</span></a>
+  <a href="{{ url_for('patient_notifications') }}" class="qa-btn"><i class="fas fa-bell" style="color:var(--orange)"></i><span>Notifications</span></a>
+</div>{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Médecins{% endblock %}
+{% block page_icon %}<i class="fas fa-user-md"></i>{% endblock %}
+{% block page_title %}Médecins{% endblock %}
+{% block content %}
+<div class="action-bar fade-in">
+  <span style="color:var(--text2);font-size:13px">{{ medecins|length }} médecin(s)</span>
+  <a href="{{ url_for('admin_ajouter_medecin') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Ajouter</a>
+</div>
+<div class="card fade-in-1"><div class="table-wrap">
+<table class="data-table">
+  <thead><tr><th>#</th><th>Médecin</th><th>Spécialité</th><th>Téléphone</th><th>Email</th><th>Téléconsult</th></tr></thead>
+  <tbody>{% for m in medecins %}<tr>
+    <td style="color:var(--text3)">{{ m.id_medecin }}</td>
+    <td><strong>Dr {{ m.nom_medecin }} {{ m.prenom_medecin }}</strong></td>
+    <td><span class="badge b-info">{{ m.specialite or '—' }}</span></td>
+    <td>{{ m.telephone or '—' }}</td>
+    <td style="color:var(--text2)">{{ m.email or '—' }}</td>
+    <td>{% if m.actif_teleconsult %}<span class="badge b-success"><i class="fas fa-video"></i> Actif</span>{% else %}<span class="badge b-muted">Inactif</span>{% endif %}</td>
+  </tr>{% else %}<tr><td colspan="6"><div class="empty-state"><i class="fas fa-user-md"></i><p>Aucun médecin.</p></div></td></tr>{% endfor %}</tbody>
+</table></div></div>
+{% endblock %}

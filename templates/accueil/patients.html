@@ -1,0 +1,23 @@
+{% extends "base.html" %}{% block title %}Patients — Accueil{% endblock %}
+{% block page_icon %}<i class="fas fa-users" style="color:var(--cyan)"></i>{% endblock %}
+{% block page_title %}Patients Enregistrés{% endblock %}
+{% block content %}
+<div class="action-bar fade-in">
+  <span style="color:var(--text2);font-size:13px">{{ patients|length }} patient(s)</span>
+  <a href="{{ url_for('accueil_ajouter_patient') }}" class="btn btn-primary"><i class="fas fa-user-plus"></i> Nouveau patient</a>
+</div>
+<div class="card fade-in-1"><div class="table-wrap"><table class="data-table">
+  <thead><tr><th>#</th><th>Nom complet</th><th>Naissance</th><th>Sexe</th><th>Téléphone</th><th>Email</th><th>Actions</th></tr></thead>
+  <tbody>{% for p in patients %}<tr>
+    <td style="color:var(--text3)">{{ p.id_patient }}</td>
+    <td><strong>{{ p.nom_patient }} {{ p.prenom_patient }}</strong></td>
+    <td style="color:var(--text2)">{{ p.date_naissance or '—' }}</td>
+    <td>{% if p.sexe=='M' %}<span class="badge b-info">M</span>{% elif p.sexe=='F' %}<span class="badge b-purple">F</span>{% else %}—{% endif %}</td>
+    <td>{{ p.telephone or '—' }}</td>
+    <td style="color:var(--text2);font-size:12px">{{ p.mail or '—' }}</td>
+    <td>
+      <a href="{{ url_for('accueil_ajouter_rdv') }}?patient={{ p.id_patient }}" class="btn btn-ghost btn-icon-sm" title="Prendre RDV"><i class="fas fa-calendar-plus"></i></a>
+    </td>
+  </tr>{% else %}<tr><td colspan="7"><div class="empty-state"><i class="fas fa-users"></i><p>Aucun patient.</p></div></td></tr>{% endfor %}</tbody>
+</table></div></div>
+{% endblock %}

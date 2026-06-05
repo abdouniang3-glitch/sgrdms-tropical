@@ -1,0 +1,43 @@
+{% extends "base.html" %}{% block title %}Nouvelle Consultation{% endblock %}
+{% block page_icon %}<i class="fas fa-notes-medical" style="color:var(--green)"></i>{% endblock %}
+{% block page_title %}Nouvelle Consultation{% endblock %}
+{% block content %}
+<div style="display:grid;grid-template-columns:1fr 2fr;gap:20px" class="fade-in">
+  <!-- Panneau gauche info patient -->
+  <div>
+    <div class="card" style="margin-bottom:16px"><div class="card-header"><span><i class="fas fa-user"></i> Patient</span></div>
+    <div class="card-body">
+      <div style="font-size:18px;font-weight:700;margin-bottom:12px">{{ rdv.nom_patient }} {{ rdv.prenom_patient }}</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:6px"><i class="fas fa-clipboard" style="width:16px;color:var(--cyan)"></i> {{ rdv.motif or '—' }}</div>
+    </div></div>
+    <div class="card"><div class="card-header"><span><i class="fas fa-heartbeat"></i> Dossier médical</span></div>
+    <div class="card-body">
+      <div class="info-block">
+        <div class="info-row"><div class="info-label">Groupe sanguin</div><div class="info-value"><span class="badge b-danger">{{ dossier.groupe_sanguin or '—' }}</span></div></div>
+        <div class="info-row"><div class="info-label">Allergies</div><div class="info-value" style="color:var(--red);font-size:12px">{{ dossier.allergies or 'Aucune' }}</div></div>
+        <div class="info-row"><div class="info-label">Antécédents</div><div class="info-value" style="font-size:12px">{{ dossier.antecedents or 'Aucun' }}</div></div>
+      </div>
+    </div></div>
+  </div>
+  <!-- Formulaire consultation -->
+  <div class="card"><div class="card-header"><span><i class="fas fa-pen-to-square"></i> Saisie de la consultation</span></div>
+  <div class="card-body">
+  <form method="POST">
+    <div class="form-row form-row-2" style="margin-bottom:0">
+      <div class="form-group"><label class="form-label">Constantes vitales</label>
+        <input type="text" name="constantes" class="form-control" placeholder="T:37°C, TA:120/80, Pouls:72, Poids:70kg"></div>
+      <div class="form-group"><label class="form-label">Montant consultation (FCFA)</label>
+        <input type="number" name="montant_total" class="form-control" value="10000"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Observations cliniques *</label>
+      <textarea name="observations" class="form-control" rows="4" required placeholder="Symptômes décrits par le patient, examen clinique effectué, résultats..."></textarea></div>
+    <div class="form-group"><label class="form-label">Diagnostic *</label>
+      <textarea name="diagnostic" class="form-control" rows="3" required placeholder="Diagnostic médical posé..."></textarea></div>
+    <div class="divider"></div>
+    <div style="display:flex;gap:12px">
+      <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Enregistrer + Générer facture</button>
+      <a href="{{ url_for('medecin_agenda') }}" class="btn btn-ghost">Annuler</a>
+    </div>
+  </form>
+  </div></div>
+</div>{% endblock %}

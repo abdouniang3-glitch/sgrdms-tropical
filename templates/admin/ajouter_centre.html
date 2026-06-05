@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% block title %}Nouveau Centre{% endblock %}{% block page_icon %}<i class="fas fa-hospital"></i>{% endblock %}{% block page_title %}Nouveau Centre Médical{% endblock %}
+{% block content %}<div style="max-width:540px"><form method="POST" class="fade-in">
+  <div class="card" style="margin-bottom:20px"><div class="card-header"><span><i class="fas fa-hospital"></i> Informations du centre</span></div>
+  <div class="card-body">
+    <div class="form-group"><label class="form-label">Nom du centre *</label><input type="text" name="nom_centre" class="form-control" required></div>
+    <div class="form-row form-row-2">
+      <div class="form-group"><label class="form-label">Type</label><select name="type_centre" class="form-select"><option>hôpital</option><option>clinique</option><option>cabinet</option><option>urgences</option></select></div>
+      <div class="form-group"><label class="form-label">Ville</label><input type="text" name="ville" class="form-control"></div>
+      <div class="form-group" style="grid-column:span 2"><label class="form-label">Adresse complète</label><textarea name="adresse" class="form-control"></textarea></div>
+      <div class="form-group"><label class="form-label">Téléphone</label><input type="text" name="telephone" class="form-control"></div>
+    </div>
+  </div></div>
+  <div style="display:flex;gap:12px"><button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Enregistrer</button><a href="{{ url_for('admin_centres') }}" class="btn btn-ghost">Annuler</a></div>
+</form></div>{% endblock %}

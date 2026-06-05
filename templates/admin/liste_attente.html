@@ -1,0 +1,22 @@
+{% extends "base.html" %}{% block title %}Liste d'attente{% endblock %}
+{% block page_icon %}<i class="fas fa-clock"></i>{% endblock %}
+{% block page_title %}Liste d'Attente{% endblock %}
+{% block content %}
+<div class="card fade-in"><div class="table-wrap"><table class="data-table">
+  <thead><tr><th>#</th><th>Date inscription</th><th>Patient</th><th>Centre</th><th>Priorité</th><th>Motif</th><th>Statut</th></tr></thead>
+  <tbody>{% for a in attentes %}<tr>
+    <td style="color:var(--text3)">{{ a.id_attente }}</td>
+    <td style="font-size:12.5px">{{ a.date_inscription }}</td>
+    <td><strong>{{ a.nom_patient }} {{ a.prenom_patient }}</strong></td>
+    <td>{{ a.nom_centre }}</td>
+    <td>{% if a.priorite=='urgente' %}<span class="badge b-danger"><i class="fas fa-circle-exclamation"></i> Urgente</span>
+        {% elif a.priorite=='haute' %}<span class="badge b-warning">Haute</span>
+        {% else %}<span class="badge b-muted">Normale</span>{% endif %}</td>
+    <td style="color:var(--text2);font-size:12.5px">{{ a.motif or '—' }}</td>
+    <td>{% if a.statut=='en attente' %}<span class="badge b-warning">En attente</span>
+        {% elif a.statut=='convoqué' %}<span class="badge b-info">Convoqué</span>
+        {% elif a.statut=='pris en charge' %}<span class="badge b-success">Pris en charge</span>
+        {% else %}<span class="badge b-muted">{{ a.statut }}</span>{% endif %}</td>
+  </tr>{% else %}<tr><td colspan="7"><div class="empty-state"><i class="fas fa-clock"></i><p>Liste d'attente vide.</p></div></td></tr>{% endfor %}</tbody>
+</table></div></div>
+{% endblock %}

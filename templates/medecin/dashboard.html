@@ -1,0 +1,47 @@
+{% extends "base.html" %}{% block title %}Médecin Dashboard{% endblock %}
+{% block page_icon %}<i class="fas fa-stethoscope" style="color:var(--green)"></i>{% endblock %}
+{% block page_title %}Dr {{ medecin.nom_medecin }} {{ medecin.prenom_medecin }}{% endblock %}
+{% block content %}
+<div class="stat-grid stat-grid-4 fade-in" style="margin-bottom:20px">
+  <div class="stat-card orange"><div class="stat-header"><div><div class="stat-value">{{ stats.rdv_today }}</div><div class="stat-label">RDV aujourd'hui</div></div><div class="stat-icon ic-orange"><i class="fas fa-calendar-day"></i></div></div></div>
+  <div class="stat-card cyan"><div class="stat-header"><div><div class="stat-value">{{ stats.consultations }}</div><div class="stat-label">Consultations total</div></div><div class="stat-icon ic-cyan"><i class="fas fa-stethoscope"></i></div></div></div>
+  <div class="stat-card green"><div class="stat-header"><div><div class="stat-value">{{ stats.ordonnances }}</div><div class="stat-label">Ordonnances émises</div></div><div class="stat-icon ic-green"><i class="fas fa-prescription"></i></div></div></div>
+  <div class="stat-card purple"><div class="stat-header"><div><div class="stat-value">{{ stats.teleconsults }}</div><div class="stat-label">Téléconsultations</div></div><div class="stat-icon ic-purple"><i class="fas fa-video"></i></div></div></div>
+</div>
+
+<div style="display:grid;grid-template-columns:2fr 1fr;gap:20px" class="fade-in-1">
+  <div class="card">
+    <div class="card-header"><span><i class="fas fa-calendar-day"></i> Rendez-vous d'aujourd'hui ({{ rdvs_today|length }})</span></div>
+    <div class="table-wrap">
+    {% if rdvs_today %}
+    <table class="data-table">
+      <thead><tr><th>Heure</th><th>Patient</th><th>Motif</th><th>Type</th><th>Statut</th><th>Action</th></tr></thead>
+      <tbody>{% for r in rdvs_today %}<tr>
+        <td><strong style="color:var(--cyan)">{{ r.heure or '—' }}</strong></td>
+        <td><strong>{{ r.nom_patient }} {{ r.prenom_patient }}</strong></td>
+        <td style="color:var(--text2);font-size:12.5px">{{ r.motif or '—' }}</td>
+        <td><span class="badge b-info">{{ r.type_rdv }}</span></td>
+        <td>{% if r.statut_rdv=='effectué' %}<span class="badge b-success">Effectué</span>{% else %}<span class="badge b-warning">{{ r.statut_rdv }}</span>{% endif %}</td>
+        <td>{% if r.statut_rdv != 'effectué' %}
+          <a href="{{ url_for('medecin_nouvelle_consultation', id_rdv=r.id_rdv) }}" class="btn btn-success btn-sm"><i class="fas fa-stethoscope"></i> Consulter</a>
+        {% else %}<span style="color:var(--text3);font-size:12px">Terminé</span>{% endif %}</td>
+      </tr>{% endfor %}</tbody>
+    </table>
+    {% else %}<div class="empty-state"><i class="fas fa-calendar-check"></i><p>Aucun rendez-vous aujourd'hui.</p></div>{% endif %}
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><span><i class="fas fa-id-card"></i> Mon profil</span></div>
+    <div class="card-body">
+      <div class="info-block">
+        <div class="info-row"><div class="info-label">Spécialité</div><div class="info-value"><span class="badge b-info">{{ medecin.specialite or '—' }}</span></div></div>
+        <div class="info-row"><div class="info-label">Téléphone</div><div class="info-value">{{ medecin.telephone or '—' }}</div></div>
+        <div class="info-row"><div class="info-label">Email</div><div class="info-value" style="font-size:12px">{{ medecin.email or '—' }}</div></div>
+        <div class="info-row"><div class="info-label">Disponibilités</div><div class="info-value" style="font-size:12px">{{ medecin.disponibilite or '—' }}</div></div>
+        <div class="info-row"><div class="info-label">Téléconsult</div><div class="info-value">{% if medecin.actif_teleconsult %}<span class="badge b-success"><i class="fas fa-check"></i> Actif</span>{% else %}<span class="badge b-muted">Inactif</span>{% endif %}</div></div>
+      </div>
+      <a href="{{ url_for('medecin_agenda') }}" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:14px"><i class="fas fa-calendar-days"></i> Voir tout l'agenda</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

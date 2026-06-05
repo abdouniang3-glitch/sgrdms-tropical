@@ -1,0 +1,26 @@
+{% extends "base.html" %}{% block title %}Urgences{% endblock %}
+{% block page_icon %}<i class="fas fa-truck-medical" style="color:var(--red)"></i>{% endblock %}
+{% block page_title %}Module Urgences / Triage{% endblock %}
+{% block content %}
+<div class="action-bar fade-in">
+  <span style="color:var(--text2);font-size:13px">{{ urgences|length }} cas en cours</span>
+  <a href="{{ url_for('admin_ajouter_urgence') }}" class="btn btn-danger"><i class="fas fa-plus"></i> Nouveau cas urgence</a>
+</div>
+<div class="card fade-in-1"><div class="table-wrap"><table class="data-table">
+  <thead><tr><th>#</th><th>Arrivée</th><th>Patient</th><th>Triage</th><th>Motif</th><th>Médecin</th><th>Statut</th></tr></thead>
+  <tbody>{% for u in urgences %}<tr>
+    <td style="color:var(--text3)">{{ u.id_urgence }}</td>
+    <td style="font-size:12.5px;color:var(--cyan)">{{ u.date_arrivee }}</td>
+    <td><strong>{{ u.nom_patient }} {{ u.prenom_patient }}</strong></td>
+    <td>{% if u.niveau_triage=='critique' %}<span class="badge b-danger"><i class="fas fa-circle"></i> Critique</span>
+        {% elif u.niveau_triage=='urgent' %}<span class="badge b-warning"><i class="fas fa-circle"></i> Urgent</span>
+        {% else %}<span class="badge b-info"><i class="fas fa-circle"></i> Moyen</span>{% endif %}</td>
+    <td style="color:var(--text2);font-size:12.5px">{{ u.motif }}</td>
+    <td>{{ ('Dr '+u.nom_medecin) if u.nom_medecin else '—' }}</td>
+    <td>{% if u.statut=='en attente' %}<span class="badge b-danger">En attente</span>
+        {% elif u.statut=='pris en charge' %}<span class="badge b-warning">En cours</span>
+        {% elif u.statut=='terminé' %}<span class="badge b-success">Terminé</span>
+        {% else %}<span class="badge b-muted">{{ u.statut }}</span>{% endif %}</td>
+  </tr>{% else %}<tr><td colspan="7"><div class="empty-state"><i class="fas fa-truck-medical"></i><p>Aucune urgence en cours.</p></div></td></tr>{% endfor %}</tbody>
+</table></div></div>
+{% endblock %}

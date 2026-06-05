@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block title %}Patients couverts{% endblock %}
+{% block page_icon %}<i class="fas fa-users-gear" style="color:var(--orange)"></i>{% endblock %}
+{% block page_title %}Patients Couverts{% endblock %}
+{% block content %}<div class="card fade-in"><div class="table-wrap"><table class="data-table">
+  <thead><tr><th>Nom</th><th>Prénom</th><th>Téléphone</th><th>Email</th><th>Assurances souscrites</th></tr></thead>
+  <tbody>{% for p in patients %}<tr>
+    <td><strong>{{ p.nom_patient }}</strong></td>
+    <td>{{ p.prenom_patient }}</td>
+    <td>{{ p.telephone or '—' }}</td>
+    <td style="color:var(--text2);font-size:12.5px">{{ p.mail or '—' }}</td>
+    <td>{% if p.assurances %}{% for a in p.assurances.split(',') %}<span class="badge b-success" style="margin-right:4px">{{ a.strip() }}</span>{% endfor %}{% else %}—{% endif %}</td>
+  </tr>{% else %}<tr><td colspan="5"><div class="empty-state"><i class="fas fa-users"></i><p>Aucun patient couvert.</p></div></td></tr>{% endfor %}</tbody>
+</table></div></div>{% endblock %}

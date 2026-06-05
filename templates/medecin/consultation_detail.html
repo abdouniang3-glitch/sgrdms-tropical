@@ -1,0 +1,40 @@
+{% extends "base.html" %}{% block title %}Consultation #{{ consult.id_consultation }}{% endblock %}
+{% block page_icon %}<i class="fas fa-stethoscope" style="color:var(--green)"></i>{% endblock %}
+{% block page_title %}Consultation #{{ consult.id_consultation }}{% endblock %}
+{% block content %}
+<div style="display:grid;grid-template-columns:2fr 1fr;gap:20px" class="fade-in">
+  <div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-header"><span><i class="fas fa-clipboard-list"></i> Détails</span><span class="badge b-success">{{ consult.statut }}</span></div>
+      <div class="card-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+          <div><div style="font-size:11px;color:var(--text3);text-transform:uppercase;margin-bottom:4px">Patient</div><div style="font-weight:700;font-size:15px">{{ consult.nom_patient }} {{ consult.prenom_patient }}</div></div>
+          <div><div style="font-size:11px;color:var(--text3);text-transform:uppercase;margin-bottom:4px">Motif</div><div style="font-size:13.5px">{{ consult.motif }}</div></div>
+        </div>
+        <div style="margin-bottom:14px"><div style="font-size:11px;color:var(--text3);text-transform:uppercase;margin-bottom:6px">Constantes vitales</div>
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px;font-family:monospace;font-size:13px;color:var(--cyan)">{{ consult.constantes_vital or '—' }}</div></div>
+        <div style="margin-bottom:14px"><div style="font-size:11px;color:var(--text3);text-transform:uppercase;margin-bottom:6px">Observations</div>
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:13.5px;line-height:1.7">{{ consult.observations }}</div></div>
+        <div><div style="font-size:11px;color:var(--text3);text-transform:uppercase;margin-bottom:6px">Diagnostic</div>
+          <div style="background:rgba(0,229,160,.07);border:1px solid rgba(0,229,160,.2);border-radius:8px;padding:12px;font-size:14px;font-weight:600;color:var(--green)">{{ consult.diagnostic }}</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span><i class="fas fa-prescription"></i> Ordonnances ({{ ordonnances|length }})</span>
+        <a href="{{ url_for('medecin_nouvelle_ordonnance', id_consult=consult.id_consultation) }}" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Nouvelle</a></div>
+      {% if ordonnances %}
+      <table class="data-table"><thead><tr><th>#</th><th>Date</th><th>Médicaments</th><th>Validité</th></tr></thead>
+      <tbody>{% for o in ordonnances %}<tr>
+        <td style="color:var(--text3)">{{ o.id_ordonnance }}</td><td>{{ o.date_ordonnance }}</td>
+        <td><span class="badge b-info">{{ o.nb_medic }} médicament(s)</span></td><td>{{ o.validite }}</td>
+      </tr>{% endfor %}</tbody></table>
+      {% else %}<div class="empty-state"><i class="fas fa-prescription"></i><p>Aucune ordonnance.</p></div>{% endif %}
+    </div>
+  </div>
+  <div>
+    <div class="card"><div class="card-body" style="display:flex;flex-direction:column;gap:10px">
+      <a href="{{ url_for('medecin_nouvelle_ordonnance', id_consult=consult.id_consultation) }}" class="btn btn-success" style="justify-content:center"><i class="fas fa-prescription"></i> Émettre ordonnance</a>
+      <a href="{{ url_for('medecin_agenda') }}" class="btn btn-ghost" style="justify-content:center"><i class="fas fa-calendar"></i> Retour agenda</a>
+    </div></div>
+  </div>
+</div>{% endblock %}
